@@ -1,14 +1,14 @@
 package com.example.fitpal
 
 import android.os.Bundle
-import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
 import com.example.fitpal.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -32,20 +32,17 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(binding.mainNavFragment.id) as? NavHostFragment
         navController = navHostController?.navController
 
-        navController?.let { NavigationUI.setupWithNavController(binding.bottomNavigationBar, it) }
-    }
+        navController?.let { navController ->
+            binding.bottomNavigationBar.setupWithNavController(navController)
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                navController?.popBackStack()
-                true
-            }
-
-            else -> {
-                navController?.let { NavigationUI.onNavDestinationSelected(item, it) }
-                true
-            }
+            onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (!navController.popBackStack()) {
+                        isEnabled = false
+                        onBackPressedDispatcher.onBackPressed()
+                    }
+                }
+            })
         }
     }
 }

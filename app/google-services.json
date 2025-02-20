@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "656865816608",
+    "project_id": "fitpal-47052",
+    "storage_bucket": "fitpal-47052.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656865816608:android:f3c4e8ef3df30b79a18c45",
+        "android_client_info": {
+          "package_name": "com.example.fitpal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyXUocKNCKHCnPdzvOQi2nckByQ7IHGx0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
