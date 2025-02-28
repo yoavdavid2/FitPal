@@ -20,7 +20,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBAnO8-UuDyultT505LXCQ3htozwcgBrGw" />
+            android:value="${GOOGLE_MAPS_API_KEY}" />
 
         <service
             android:name=".GPSService"
