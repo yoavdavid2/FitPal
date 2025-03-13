@@ -10,4 +10,11 @@
     <string name="sign_up">Sign Up</string>
     <string name="or">OR</string>
     <string name="continue_with_google">Continue with Google</string>
+    <string name="profile">Profile</string>
+    <string name="email_address">Email Address</string>
+    <string name="sign_up_to_fitpal">Sign up to FitPal</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
 </resources>

@@ -6,7 +6,7 @@
     android:background="@drawable/login_background"
     android:gravity="center"
     android:padding="16dp"
-    tools:context=".LoginActivity">
+    tools:context=".SignupActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/welcome_to_fitpal"
+            android:text="@string/sign_up_to_fitpal"
             android:textColor="@color/white"
             android:textSize="40sp" />
 
@@ -31,10 +31,38 @@
             android:src="@drawable/ic_profile_filled" />
 
         <EditText
-            android:id="@+id/email_input"
+            android:id="@+id/first_name_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
+            android:background="@drawable/rounded_corner"
+            android:hint="@string/first_name"
+            android:inputType="text"
+            android:padding="18dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="20sp"
+            tools:ignore="Autofill" />
+
+        <EditText
+            android:id="@+id/last_name_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_corner"
+            android:hint="@string/last_name"
+            android:inputType="text"
+            android:padding="18dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="20sp"
+            tools:ignore="Autofill" />
+
+        <EditText
+            android:id="@+id/email_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:background="@drawable/rounded_corner"
             android:hint="@string/email_address"
             android:inputType="textEmailAddress"
@@ -58,54 +86,55 @@
             android:textSize="20sp"
             tools:ignore="Autofill" />
 
-        <Button
-            android:id="@+id/login_button"
-            android:layout_width="match_parent"
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:backgroundTint="@color/white"
-            android:padding="8dp"
-            android:text="@string/login"
-            android:textColor="#B822D3"
-            android:textSize="20sp" />
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/male_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/male"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_marginEnd="20dp"/>
+
+            <CheckBox
+                android:id="@+id/female_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/female"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_marginStart="20dp"/>
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/sign_up_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:backgroundTint="@color/white"
             android:padding="8dp"
             android:text="@string/sign_up"
             android:textColor="#B822D3"
             android:textSize="20sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:gravity="center"
-            android:text="@string/or"
-            android:textColor="@color/white"
-            android:textSize="30sp" />
-
         <Button
-            android:id="@+id/login_google_button"
+            android:id="@+id/login_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/white"
-            android:drawableLeft="@drawable/ic_google_logo"
-            android:drawablePadding="4dp"
-            android:paddingStart="4dp"
-            android:paddingTop="1dp"
-            android:paddingEnd="35dp"
-            android:paddingBottom="1dp"
-            android:text="@string/continue_with_google"
-            android:textAlignment="center"
+            android:padding="8dp"
+            android:text="@string/login"
             android:textColor="#B822D3"
-            android:textSize="20sp"
-            tools:ignore="RtlHardcoded" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
