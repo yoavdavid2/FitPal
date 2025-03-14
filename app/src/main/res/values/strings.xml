@@ -17,4 +17,6 @@
     <string name="last_name">Last Name</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
+    <!-- TODO: get google client id -->
+    <string name="default_web_client_id">your-project-id.apps.googleusercontent.com</string>
 </resources>
