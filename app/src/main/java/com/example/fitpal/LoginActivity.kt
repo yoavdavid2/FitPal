@@ -17,6 +17,7 @@ class LoginActivity : Activity() {
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
     private lateinit var loginButton: Button
+    private lateinit var signUpButton: Button
     private lateinit var mAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +29,7 @@ class LoginActivity : Activity() {
         emailInput = findViewById(R.id.email_input)
         passwordInput = findViewById(R.id.password_input)
         loginButton = findViewById(R.id.login_button)
+        signUpButton = findViewById(R.id.sign_up_button)
 
         loginButton.setOnClickListener {
             val email = emailInput.text.toString()
@@ -49,6 +51,11 @@ class LoginActivity : Activity() {
                     }
                 }
 
+        }
+
+        signUpButton.setOnClickListener {
+            val intent = Intent(this, SignupActivity::class.java)
+            startActivity(intent)
         }
     }
 
