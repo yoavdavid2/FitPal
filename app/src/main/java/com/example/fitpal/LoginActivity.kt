@@ -41,11 +41,9 @@ class LoginActivity : Activity() {
             mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // Sign in success
                         val user = mAuth.currentUser
                         updateUI(user)
                     } else {
-                        // If sign in fails, display a message to the user.
                         Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
                         updateUI(null)
                     }
@@ -57,7 +55,7 @@ class LoginActivity : Activity() {
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
             Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MainActivity::class.java) // Replace with your main activity
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         } else {
