@@ -1,4 +1,4 @@
-package com.example.fitpal
+package com.example.fitpal.viewmodels
 
 import androidx.lifecycle.ViewModel
 
