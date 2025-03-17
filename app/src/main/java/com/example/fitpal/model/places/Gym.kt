@@ -1,4 +1,4 @@
-package com.example.fitpal.model
+package com.example.fitpal.model.places
 
 data class Gym(
     val id: String,

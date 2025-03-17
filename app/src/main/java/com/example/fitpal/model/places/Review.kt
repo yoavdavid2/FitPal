@@ -1,4 +1,4 @@
-package com.example.fitpal.model
+package com.example.fitpal.model.places
 
 data class Review (
     val authorName: String,

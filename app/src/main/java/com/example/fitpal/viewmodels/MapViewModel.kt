@@ -10,7 +10,8 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.fitpal.utils.extensions.isWithinRadius
+import com.example.fitpal.model.places.Place
+import com.example.fitpal.model.repositories.PlacesRepository
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -18,10 +19,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.CancellationTokenSource
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
-import com.google.android.libraries.places.api.net.PlacesClient
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 class MapViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -31,25 +32,24 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
     private val _markers = MutableLiveData<List<MarkerOptions>>()
     val markers: LiveData<List<MarkerOptions>> = _markers
 
-    private val _zoomLevel = MutableLiveData<Float>()
-    val zoomLevel: LiveData<Float> = _zoomLevel
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> = _errorMessage
 
-    private val placesClient: PlacesClient = Places.createClient(application)
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(application)
+    private val placesRepository = PlacesRepository()
 
     init {
-        _currentLocation.value = LatLng(-34.0, 151.0)
-        _zoomLevel.value = 12f
+        _currentLocation.value = LatLng(0.0, 0.0)
         _markers.value = listOf(
             MarkerOptions()
                 .position(_currentLocation.value!!)
-                .title("San Fransisco")
+                .title("Default Location")
         )
-    }
-
-    fun updateCurrentLocation(latLng: LatLng) {
-        _currentLocation.value = latLng
+        _isLoading.value = false
     }
 
     fun hasLocationPermissions(context: Context): Boolean {
@@ -60,8 +60,10 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
-    fun getUserLocation(context: Context) {
+    fun getUserLocation(context: Context, showPermissionError: Boolean = true) {
         Log.d("mapFragment", "Starting locations search")
+        _isLoading.value = true
+
         if (hasLocationPermissions(context)) {
             fusedLocationClient.getCurrentLocation(
                 Priority.PRIORITY_HIGH_ACCURACY,
@@ -72,35 +74,68 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
                     _currentLocation.postValue(current)
                     getNearbyGyms(current)
                 }
-            }.addOnFailureListener { }
+            }.addOnFailureListener {
+                _errorMessage.postValue("Failed to get current location")
+                _isLoading.postValue(false)
+            }
+        } else if (showPermissionError) {
+            _errorMessage.postValue("Location permission not granted")
+            _isLoading.postValue(false)
         }
     }
 
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     private fun getNearbyGyms(userLocation: LatLng) {
         Log.d("mapFragment", "Starting gyms search")
-        val placesRequest =
-            FindCurrentPlaceRequest.newInstance(listOf(Place.Field.NAME, Place.Field.LAT_LNG))
 
-        placesClient.findCurrentPlace(placesRequest)
-            .addOnSuccessListener { response ->
-                val gyms = response.placeLikelihoods.mapNotNull { placeLikelihood ->
-                    placeLikelihood.place.latLng?.let { latLng ->
-                        Log.d("mapFragment", "Color checking")
-                        val color = if (5000.0.isWithinRadius(
-                                userLocation,
-                                latLng
-                            )
-                        ) BitmapDescriptorFactory.HUE_GREEN else BitmapDescriptorFactory.HUE_ORANGE
-                        Log.d("mapFragment", "Color checking finished")
-                        return@let MarkerOptions()
-                            .position(latLng)
-                            .title(placeLikelihood.place.name)
-                            .icon(BitmapDescriptorFactory.defaultMarker(color))
+        placesRepository.findNearbyGyms(
+            latitude = userLocation.latitude,
+            longitude = userLocation.longitude,
+            radiusInMeters = 10000,
+            callback = object : PlacesRepository.NearbyGymsCallback {
+                override fun onSuccess(gyms: List<Place>) {
+                    if (gyms.isEmpty()) {
+                        _errorMessage.postValue("No gyms found within 5km radius")
+                    } else {
+                        updateGymMarkers(gyms, userLocation)
                     }
+                    _isLoading.postValue(false)
                 }
-                _markers.postValue(gyms)
+
+                override fun onError(error: Exception) {
+                    _errorMessage.postValue("Error finding gyms: ${error.message}")
+                    _isLoading.postValue(false)
+                }
             }
+        )
     }
 
+    private fun updateGymMarkers(gyms: List<Place>, userLocation: LatLng) {
+        val userMarker = MarkerOptions()
+            .position(userLocation)
+            .title("Your Location")
+            .snippet("You are here")
+            .icon(BitmapDescriptorFactory.defaultMarker())
+
+        val gymMarkers = gyms.map { gym ->
+            val color = when {
+                gym.types?.contains("fitness_center") == true -> BitmapDescriptorFactory.HUE_GREEN
+                gym.types?.contains("gym") == true -> BitmapDescriptorFactory.HUE_CYAN
+                else -> BitmapDescriptorFactory.HUE_ORANGE
+            }
+
+            MarkerOptions()
+                .position(
+                    LatLng(
+                        gym.location.latitude,
+                        gym.location.longitude
+                    )
+                )
+                .title(gym.displayName.text)
+                .snippet(gym.formattedAddress ?: "")
+                .icon(BitmapDescriptorFactory.defaultMarker(color))
+        }
+
+        _markers.postValue(listOf(userMarker) + gymMarkers)
+    }
 }
