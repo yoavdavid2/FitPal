@@ -21,6 +21,7 @@ android {
 
         buildConfigField("String", "PLACES_API_URL", "\"${project.properties["PLACES_API_URL"] ?: ""}\"")
         buildConfigField("String", "MAPS_API_URL", "\"${project.properties["MAPS_API_URL"] ?: ""}\"")
+        buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${project.properties["GOOGLE_MAPS_API_KEY"] ?: ""}\"")
     }
 
     buildTypes {
