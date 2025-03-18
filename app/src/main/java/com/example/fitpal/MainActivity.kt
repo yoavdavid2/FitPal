@@ -1,6 +1,7 @@
 package com.example.fitpal
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +35,17 @@ class MainActivity : AppCompatActivity() {
 
         navController?.let { navController ->
             binding.bottomNavigationBar.setupWithNavController(navController)
+
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                when (destination.id) {
+                    R.id.loginFragment, R.id.signupFragment -> {
+                        binding.bottomNavigationBar.visibility = View.GONE
+                    }
+                    else -> {
+                        binding.bottomNavigationBar.visibility = View.VISIBLE
+                    }
+                }
+            }
 
             onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {

@@ -1,6 +1,8 @@
 package com.example.fitpal
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +10,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.fitpal.databinding.FragmentSignupBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class SignupFragment : Fragment() {
 
     private var _binding: FragmentSignupBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var mAuth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,30 +30,51 @@ class SignupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mAuth = FirebaseAuth.getInstance()
+
         binding.apply {
-            signUpButton.setOnClickListener {
-                val firstName = firstNameInput.text.toString().trim()
-                val lastName = lastNameInput.text.toString().trim()
-                val email = emailInput.text.toString().trim()
-                val password = passwordInput.text.toString().trim()
 
-                when {
-                    firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() -> {
-                        Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
-                    }
-                    !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                        Toast.makeText(requireContext(), "Please enter a valid email address", Toast.LENGTH_SHORT).show()
-                    }
-                    password.length < 6 -> {
-                        Toast.makeText(requireContext(), "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
-                    }
-                    else -> {
-                        Toast.makeText(requireContext(), "Signup Successful!", Toast.LENGTH_SHORT).show()
-                        Log.i("Signup Success", "Email: $email, Password: $password")
+            val textWatcher = object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-                        parentFragmentManager.popBackStack()
-                    }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val emailNotEmpty = emailInput.text.toString().isNotEmpty()
+                    val passwordNotEmpty = passwordInput.text.toString().isNotEmpty()
+
+                    signUpButton.isEnabled = emailNotEmpty && passwordNotEmpty
+                    signUpButton.animate().alpha(if (loginButton.isEnabled) 1f else 0.5f).setDuration(300).start()
                 }
+
+                override fun afterTextChanged(s: Editable?) {}
+            }
+
+            firstNameInput.addTextChangedListener(textWatcher)
+            lastNameInput.addTextChangedListener(textWatcher)
+            emailInput.addTextChangedListener(textWatcher)
+            passwordInput.addTextChangedListener(textWatcher)
+
+            signUpButton.apply {
+                setOnClickListener {
+                    val firstName = firstNameInput.text.toString().trim()
+                    val lastName = lastNameInput.text.toString().trim()
+                    val email = emailInput.text.toString().trim()
+                    val password = passwordInput.text.toString().trim()
+
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.i("Signup Success", "Email: $email, Password: $password")
+
+                                parentFragmentManager.popBackStack()
+                            } else {
+                                Toast.makeText(requireContext(), "Signup failed.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                }
+
+                isEnabled = false
+                alpha = 0.5f
+
             }
 
             loginButton.setOnClickListener {

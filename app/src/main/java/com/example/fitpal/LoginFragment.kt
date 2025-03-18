@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.fitpal.databinding.FragmentLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -93,9 +95,8 @@ class LoginFragment : Fragment() {
 
             signUpButton.apply {
                 setOnClickListener {
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, SignupFragment())
-                        .commit()
+                    val action = LoginFragmentDirections.actionLoginFragmentToSignupFragment()
+                    findNavController().navigate(action)
                 }
             }
         }
@@ -130,9 +131,9 @@ class LoginFragment : Fragment() {
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
             Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, FeedFragment())
-                .commit()
+            val action = LoginFragmentDirections.actionLoginFragmentToFeedFragment()
+            findNavController().navigate(action)
+
         } else {
             Log.i("LoginFragment", "Login failed or user is null.")
         }
