@@ -27,8 +27,9 @@ class Model private constructor() {
 
     private val database: AppLocalDbRepository = AppLocalDB.database
     private var executor = Executors.newSingleThreadExecutor()
-    private var mainHandler = HandlerCompat.createAsync(Looper.getMainLooper())
-    val posts: LiveData<List<Post>> = database.postDao().getAllPosts()
+
+    val posts: LiveData<List<Post>>
+        get() = database.postDao().getAllPosts()
     val loadingState: MutableLiveData<LoadingState> = MutableLiveData<LoadingState>()
 
     private val firebaseModel = FirebaseModel()

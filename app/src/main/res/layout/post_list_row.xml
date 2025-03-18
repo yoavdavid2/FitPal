@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
     android:padding="10dp">
 
     <ImageView
@@ -75,7 +76,7 @@
         android:id="@+id/btnLike"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/like_button"
         android:padding="8dp"
@@ -84,62 +85,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/postImage" />
 
+    <TextView
+        android:id="@+id/likesBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/badge_background"
+        android:gravity="center"
+        android:minWidth="20dp"
+        android:paddingStart="4dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="4dp"
+        android:paddingBottom="2dp"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@id/btnLike"
+        app:layout_constraintTop_toTopOf="@id/btnLike" />
+
     <ImageButton
         android:id="@+id/btnComment"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="12dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/comments"
         android:padding="8dp"
         android:src="@drawable/ic_chat_selector"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/btnLike"
-        app:layout_constraintTop_toBottomOf="@id/postImage" />
+        app:layout_constraintTop_toBottomOf="@+id/postImage" />
 
     <TextView
-        android:id="@+id/likeCount"
+        android:id="@+id/commentsBadge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="12 "
+        android:background="@drawable/badge_background_blue"
+        android:gravity="center"
+        android:minWidth="20dp"
+        android:paddingStart="4dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="4dp"
+        android:paddingBottom="2dp"
+        android:textColor="@android:color/white"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnLike"
-        app:layout_constraintTop_toBottomOf="@+id/postImage"
-        app:layout_constraintVertical_bias="0.552" />
-
-    <TextView
-        android:id="@+id/commentCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:paddingStart="8dp"
-        android:text="5"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
-        app:layout_constraintEnd_toStartOf="@+id/textView5" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="Likes"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/likeCount"
-        app:layout_constraintStart_toEndOf="@+id/likeCount" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:text="Comments"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/likeCount"
-        app:layout_constraintEnd_toStartOf="@+id/btnComment" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/likesBadge"
+        app:layout_constraintEnd_toEndOf="@id/btnComment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

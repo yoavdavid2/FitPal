@@ -3,7 +3,6 @@ package com.example.fitpal.model
 import android.content.Context
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.fitpal.R
 import com.example.fitpal.base.MyApplication
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
@@ -24,7 +23,7 @@ data class Post(
     var likes: Int = 0,
     var comments: Int = 0,
     val uploadDate: String,
-    val lastUpdated: Long? = null
+    val lastUpdated: Long? = null,
 ) {
 
     companion object {
@@ -32,11 +31,12 @@ data class Post(
         var lastUpdated: Long
             get() = MyApplication.Globals.context?.getSharedPreferences("TAG", Context.MODE_PRIVATE)
                 ?.getLong(LOCAL_LAST_UPDATED, 0) ?: 0
-
             set(value) {
                 MyApplication.Globals.context
                     ?.getSharedPreferences("TAG", Context.MODE_PRIVATE)?.apply {
-                        edit().putLong(LOCAL_LAST_UPDATED, value).apply()
+                        edit()
+                            .putLong(LOCAL_LAST_UPDATED, value)
+                            .apply()
                     }
             }
 
