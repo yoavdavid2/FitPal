@@ -90,15 +90,16 @@ class LoginFragment : Fragment() {
                 isEnabled = false
                 alpha = 0.5f
             }
+
+            signUpButton.apply {
+                setOnClickListener {
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, SignupFragment())
+                        .commit()
+                }
+            }
         }
 
-        binding.signUpButton.setOnClickListener {
-
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, SignupFragment())
-                .addToBackStack(null)
-                .commit()
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
