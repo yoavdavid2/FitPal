@@ -10,7 +10,15 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.fitpal.databinding.ActivityMainBinding
+import com.example.fitpal.model.Post
 import com.google.android.libraries.places.api.Places
+import com.google.firebase.Firebase
+import com.google.firebase.FirebaseApp
+
+interface OnItemClickListener {
+    fun onItemClick(position: Int)
+    fun onItemClick(student: Post?)
+}
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,6 +54,7 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
+        FirebaseApp.initializeApp(this);
         Places.initialize(applicationContext, BuildConfig.GOOGLE_MAPS_API_KEY)
     }
 }

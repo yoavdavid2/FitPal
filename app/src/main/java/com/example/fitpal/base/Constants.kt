@@ -1,8 +1,14 @@
 package com.example.fitpal.base
 
+import com.example.fitpal.model.Post
+
+
+typealias PostsCallback = (List<Post>) -> Unit
+typealias EmptyCallback = () -> Unit
+
 object Constants {
 
     object Collections {
-        const val Posts = "posts"
+        const val POSTS = "posts"
     }
 }

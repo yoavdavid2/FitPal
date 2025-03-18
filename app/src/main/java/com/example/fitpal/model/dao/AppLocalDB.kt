@@ -8,7 +8,7 @@ import com.example.fitpal.model.Post
 
 @Database(entities = [Post::class], version = 1)
 abstract class AppLocalDbRepository : RoomDatabase() {
-    abstract fun PostDao(): PostDao
+    abstract fun postDao(): PostDao
 }
 
 object AppLocalDB {
