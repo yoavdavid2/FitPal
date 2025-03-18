@@ -1,4 +1,4 @@
-package com.example.fitpal.model.repositories
+package com.example.fitpal.repositories
 
 import android.util.Log
 import com.example.fitpal.BuildConfig
@@ -51,8 +51,6 @@ class PlacesRepository {
                     request = requestBody
                 )
 
-                Log.d("PlacesRepository", "Request URL: ${call.request().url()}")
-                Log.d("PlacesRepository", "Request Headers: ${call.request().headers()}")
                 val response = call.execute()
 
                 if (response.isSuccessful) {
@@ -60,7 +58,6 @@ class PlacesRepository {
                     val places = placesResponse?.places.orEmpty()
 
                     if (placesResponse == null) {
-                        Log.e("PlacesRepository", "Response body is null")
                         callback.onError(Exception("Response body is null"))
                         return@execute
                     }
@@ -70,12 +67,10 @@ class PlacesRepository {
                     if (places.isNotEmpty()) {
                         callback.onSuccess(places)
                     } else {
-                        Log.e("PlacesRepository", "No gyms found")
                         callback.onError(Exception("No gyms found"))
                     }
                 } else {
                     val errorMsg = "API Error: ${response.code()} - ${response.message()}"
-                    Log.e("PlacesRepository", errorMsg)
                     callback.onError(Exception(errorMsg))
                 }
 

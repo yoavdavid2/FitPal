@@ -10,8 +10,9 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.fitpal.model.MarkerOptionsWithPlace
 import com.example.fitpal.model.places.Place
-import com.example.fitpal.model.repositories.PlacesRepository
+import com.example.fitpal.repositories.PlacesRepository
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -19,18 +20,17 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.CancellationTokenSource
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
 
 class MapViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _currentLocation = MutableLiveData<LatLng?>()
     val currentLocation: LiveData<LatLng?> = _currentLocation
 
-    private val _markers = MutableLiveData<List<MarkerOptions>>()
-    val markers: LiveData<List<MarkerOptions>> = _markers
+    private val _markers = MutableLiveData<List<MarkerOptionsWithPlace>>()
+    val markers: LiveData<List<MarkerOptionsWithPlace>> = _markers
+
+    private val _selectedGym = MutableLiveData<Place?>()
+    val selectedGym: LiveData<Place?> = _selectedGym
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
@@ -38,18 +38,26 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _isLoadingDetails = MutableLiveData<Boolean>()
+    val isLoadingDetails: LiveData<Boolean> = _isLoadingDetails
+
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(application)
     private val placesRepository = PlacesRepository()
+    private val placesByMarkerId = mutableMapOf<String, Place>()
 
     init {
         _currentLocation.value = LatLng(0.0, 0.0)
         _markers.value = listOf(
-            MarkerOptions()
-                .position(_currentLocation.value!!)
-                .title("Default Location")
+            MarkerOptionsWithPlace(
+                MarkerOptions()
+                    .position(_currentLocation.value!!)
+                    .title("Default Location"),
+                null
+            )
         )
         _isLoading.value = false
+        _isLoadingDetails.value = false
     }
 
     fun hasLocationPermissions(context: Context): Boolean {
@@ -111,11 +119,16 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun updateGymMarkers(gyms: List<Place>, userLocation: LatLng) {
-        val userMarker = MarkerOptions()
-            .position(userLocation)
-            .title("Your Location")
-            .snippet("You are here")
-            .icon(BitmapDescriptorFactory.defaultMarker())
+        placesByMarkerId.clear()
+
+        val userMarker = MarkerOptionsWithPlace(
+            MarkerOptions()
+                .position(userLocation)
+                .title("Your Location")
+                .snippet("You are here")
+                .icon(BitmapDescriptorFactory.defaultMarker()),
+            null
+        )
 
         val gymMarkers = gyms.map { gym ->
             val color = when {
@@ -124,18 +137,36 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
                 else -> BitmapDescriptorFactory.HUE_ORANGE
             }
 
-            MarkerOptions()
-                .position(
-                    LatLng(
-                        gym.location.latitude,
-                        gym.location.longitude
+            MarkerOptionsWithPlace(
+                MarkerOptions()
+                    .position(
+                        LatLng(
+                            gym.location.latitude,
+                            gym.location.longitude
+                        )
                     )
-                )
-                .title(gym.displayName.text)
-                .snippet(gym.formattedAddress ?: "")
-                .icon(BitmapDescriptorFactory.defaultMarker(color))
+                    .title(gym.displayName.text)
+                    .snippet(gym.formattedAddress ?: "")
+                    .icon(BitmapDescriptorFactory.defaultMarker(color)),
+                gym
+            )
+
         }
 
         _markers.postValue(listOf(userMarker) + gymMarkers)
+    }
+
+    fun onMarkerSelected(markerId: String) {
+        _selectedGym.value = placesByMarkerId[markerId]
+    }
+
+    fun registerMarker(markerId: String, place: Place?) {
+        if (place != null) {
+            placesByMarkerId[markerId] = place
+        }
+    }
+
+    fun clearSelectedGym() {
+        _selectedGym.value = null
     }
 }
