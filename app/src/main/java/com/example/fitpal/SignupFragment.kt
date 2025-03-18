@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.fitpal.databinding.FragmentSignupBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class SignupFragment : Fragment() {
 
@@ -18,10 +19,11 @@ class SignupFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var mAuth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentSignupBinding.inflate(inflater, container, false)
         return binding.root
@@ -31,8 +33,21 @@ class SignupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mAuth = FirebaseAuth.getInstance()
+        db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
 
         binding.apply {
+
+            maleCheckbox.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    femaleCheckbox.isChecked = false
+                }
+            }
+
+            femaleCheckbox.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    maleCheckbox.isChecked = false
+                }
+            }
 
             val textWatcher = object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -59,11 +74,24 @@ class SignupFragment : Fragment() {
                     val lastName = lastNameInput.text.toString().trim()
                     val email = emailInput.text.toString().trim()
                     val password = passwordInput.text.toString().trim()
+                    val isMale = maleCheckbox.isChecked
 
                     mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 Log.i("Signup Success", "Email: $email, Password: $password")
+
+                                val user = User(firstName, lastName, email, isMale)
+
+                                val userId = mAuth.currentUser?.uid ?: ""
+
+                                db.collection("users").document(userId).set(user)
+                                    .addOnSuccessListener {
+                                        Log.d("Firestore", "DocumentSnapshot successfully written!")
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w("Firestore", "Error writing document", e)
+                                    }
 
                                 parentFragmentManager.popBackStack()
                             } else {
