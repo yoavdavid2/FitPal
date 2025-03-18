@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.fitpal.databinding.ActivityLoginBinding
+import com.example.fitpal.databinding.FragmentLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -21,7 +21,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 
 class LoginFragment : Fragment() {
 
-    private var _binding: ActivityLoginBinding? = null
+    private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var mAuth: FirebaseAuth
@@ -31,7 +31,7 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -130,7 +130,7 @@ class LoginFragment : Fragment() {
         if (user != null) {
             Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, MainFragment())
+                .replace(R.id.fragmentContainer, FeedFragment())
                 .commit()
         } else {
             Log.i("LoginFragment", "Login failed or user is null.")
