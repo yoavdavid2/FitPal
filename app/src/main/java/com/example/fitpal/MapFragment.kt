@@ -186,8 +186,13 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         isMapReady = true
         setupMapSettings()
 
-        map?.clear()
-        map?.setOnMarkerClickListener(this)
+        map?.apply {
+            clear()
+            setOnMarkerClickListener(this@MapFragment)
+            setOnMapClickListener {
+                hideBottomSheet()
+            }
+        }
 
         requestLocationIfNeeded()
         Log.d(TAG, "Map ready")
@@ -327,6 +332,13 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
 
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    private fun hideBottomSheet() {
+        if (::bottomSheetBehavior.isInitialized) {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            viewModel.clearSelectedGym()
+        }
     }
 
     private fun openDirections(place: Place) {
