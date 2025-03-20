@@ -32,14 +32,6 @@
             android:foregroundServiceType="location" />
 
         <activity
-            android:name=".InitialActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false"
-            android:label="@string/title_activity_login"
-            android:theme="@style/Theme.FitPal" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

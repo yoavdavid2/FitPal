@@ -15,7 +15,6 @@ import com.google.firebase.auth.FirebaseAuth
 
 import com.example.fitpal.model.Post
 import com.google.android.libraries.places.api.Places
-import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 
 interface OnItemClickListener {

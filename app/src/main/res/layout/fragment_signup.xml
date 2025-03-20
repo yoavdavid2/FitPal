@@ -100,7 +100,7 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/sportsDropdown"
-                    android:layout_width="match_parent"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
                     android:hint="Select Sports"

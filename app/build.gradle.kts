@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
-    alias(libs.plugins.google.services)
 }
 
 android {
@@ -66,13 +65,13 @@ dependencies {
     // ROOM
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.google.places)
     kapt(libs.androidx.room.compiler)
     implementation(libs.picasso)
 
     // Firebase
     implementation(platform(libs.firebase.bom))
 
-    implementation(libs.firebase.analytics)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
