@@ -14,8 +14,8 @@
             android:id="@+id/action_feedFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
         <action
-            android:id="@+id/action_feedFragment_to_profileFragment2"
-            app:destination="@id/profileFragment" />
+            android:id="@+id/action_feedFragment_to_newPostFragment"
+            app:destination="@id/newPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
@@ -51,6 +51,15 @@
         <action
             android:id="@+id/action_profileFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newPostFragment"
+        android:name="com.example.fitpal.NewPostFragment"
+        android:label="fragment_new_post"
+        tools:layout="@layout/fragment_new_post" >
+        <action
+            android:id="@+id/action_newPostFragment_to_feedFragment"
+            app:destination="@id/feedFragment" />
     </fragment>
 
 </navigation>
