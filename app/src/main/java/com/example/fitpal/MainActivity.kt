@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var navController: NavController? = null
     private lateinit var mAuth: FirebaseAuth
-    private lateinit var authStateListener: FirebaseAuth.AuthStateListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,16 +47,6 @@ class MainActivity : AppCompatActivity() {
         val currentUser = mAuth.currentUser
         if (currentUser != null) {
             navController.navigate(R.id.feedFragment)
-        }
-
-        mAuth = FirebaseAuth.getInstance()
-        authStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
-            val user = firebaseAuth.currentUser
-            if (user != null) {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, FeedFragment())
-                    .commit()
-            }
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
