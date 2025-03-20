@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.constraintlayout)
 
     implementation(libs.firebase.firestore)
 
@@ -106,6 +107,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("com.google.firebase:firebase-auth:22.0.0")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+
 
 
 }

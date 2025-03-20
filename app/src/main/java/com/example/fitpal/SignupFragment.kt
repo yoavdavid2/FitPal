@@ -1,5 +1,7 @@
 package com.example.fitpal
 
+import android.R
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,6 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.fitpal.databinding.FragmentSignupBinding
@@ -21,6 +25,8 @@ class SignupFragment : Fragment() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
+    private val selectedSports = mutableSetOf<String>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -34,6 +40,29 @@ class SignupFragment : Fragment() {
 
         mAuth = FirebaseAuth.getInstance()
         db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+
+        val sports = listOf("Football", "Basketball", "Tennis", "Swimming", "Running")
+
+        binding.sportsDropdown.setOnClickListener {
+            val selectedItems = BooleanArray(sports.size)
+
+            AlertDialog.Builder(requireContext())
+                .setTitle("Select Sports")
+                .setMultiChoiceItems(sports.toTypedArray(), selectedItems) { _, index, isChecked ->
+                    if (isChecked) {
+                        selectedSports.add(sports[index])
+                    } else {
+                        selectedSports.remove(sports[index])
+                    }
+                }
+                .setPositiveButton("OK") { _, _ ->
+                    binding.sportsDropdown.setText(selectedSports.joinToString(", "))
+                    Log.d("Dropdown", "Selected Sports: $selectedSports")
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+
 
         binding.apply {
 
@@ -81,7 +110,7 @@ class SignupFragment : Fragment() {
                             if (task.isSuccessful) {
                                 Log.i("Signup Success", "Email: $email, Password: $password")
 
-                                val user = User(firstName, lastName, email, isMale)
+                                val user = User(firstName, lastName, email, isMale, 0, selectedSports.toList())
 
                                 val userId = mAuth.currentUser?.uid ?: ""
 
