@@ -46,7 +46,14 @@ class MainActivity : AppCompatActivity() {
 
         val currentUser = mAuth.currentUser
         if (currentUser != null) {
-            navController.navigate(R.id.feedFragment)
+            navController.navigate(
+                R.id.feedFragment,
+                null,
+                androidx.navigation.NavOptions.Builder()
+                    .setPopUpTo(R.id.loginFragment, true)
+                    .build()
+            )
+
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

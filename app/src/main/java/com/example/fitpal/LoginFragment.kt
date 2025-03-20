@@ -114,8 +114,7 @@ class LoginFragment : Fragment() {
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     Log.d("Firestore", "User already exists in Firestore")
-                    val action = LoginFragmentDirections.actionLoginFragmentToFeedFragment()
-                    findNavController().navigate(action)
+                    navigateToFeedFragment()
                 } else {
                     saveGoogleUserToFirestore(user)
                 }
@@ -141,8 +140,7 @@ class LoginFragment : Fragment() {
         db.collection("users").document(userId).set(googleUser)
             .addOnSuccessListener {
                 Log.d("Firestore", "DocumentSnapshot successfully written!")
-                val action = LoginFragmentDirections.actionLoginFragmentToFeedFragment()
-                findNavController().navigate(action)
+                navigateToFeedFragment()
             }
             .addOnFailureListener { e ->
                 Log.w("Firestore", "Error writing document", e)
@@ -184,8 +182,7 @@ class LoginFragment : Fragment() {
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
             Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
-            val action = LoginFragmentDirections.actionLoginFragmentToFeedFragment()
-            findNavController().navigate(action)
+            navigateToFeedFragment()
 
         } else {
             Log.i("LoginFragment", "Login failed or user is null.")
@@ -199,5 +196,14 @@ class LoginFragment : Fragment() {
 
     companion object {
         private const val RC_SIGN_IN = 9001
+    }
+
+    private fun navigateToFeedFragment() {
+        val navController = findNavController()
+        val action = LoginFragmentDirections.actionLoginFragmentToFeedFragment()
+        navController.navigate(action,
+            androidx.navigation.NavOptions.Builder()
+                .setPopUpTo(R.id.loginFragment, true)
+                .build())
     }
 }
