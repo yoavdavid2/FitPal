@@ -11,7 +11,11 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.fitpal.databinding.ActivityMainBinding
+
 import com.google.firebase.auth.FirebaseAuth
+
+import com.google.android.libraries.places.api.Places
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -72,5 +76,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
+
+        Places.initialize(applicationContext, BuildConfig.GOOGLE_MAPS_API_KEY)
     }
 }
