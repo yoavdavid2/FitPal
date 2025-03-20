@@ -90,48 +90,6 @@
         app:layout_marginStart="16dp"
         app:layout_marginTop="16dp" />
 
-    <TextView
-        android:id="@+id/label1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Label"
-        android:textSize="14sp"
-        android:textColor="@android:color/black"
-        android:background="@drawable/bg_label"
-        android:layout_marginStart="21dp"
-        android:layout_marginBottom="4dp"
-        android:padding="6dp"
-        app:layout_constraintBottom_toTopOf="@id/postsRecyclerView"
-        app:layout_constraintStart_toStartOf="@id/sportsFlow"/>
-
-    <TextView
-        android:id="@+id/label2"
-        style="@style/LabelStyle"
-        android:text="Label"
-        android:layout_marginStart="21dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@id/postsRecyclerView"
-        app:layout_constraintStart_toEndOf="@id/label1"/>
-
-
-    <TextView
-        android:id="@+id/label3"
-        style="@style/LabelStyle"
-        android:text="Label"
-        android:layout_marginStart="21dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@id/postsRecyclerView"
-        app:layout_constraintStart_toEndOf="@id/label2"/>
-
-    <TextView
-        android:id="@+id/label4"
-        style="@style/LabelStyle"
-        android:text="Label"
-        android:layout_marginStart="21dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@id/postsRecyclerView"
-        app:layout_constraintStart_toEndOf="@id/label3"/>
-
     <!-- Posts List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/postsRecyclerView"

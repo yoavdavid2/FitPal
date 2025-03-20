@@ -71,26 +71,38 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupSportsLabels(sports: List<String>) {
-        binding.sportsFlow.removeAllViews()
+        val parentLayout = binding.sportsFlow.parent as ViewGroup
+
+        for (id in binding.sportsFlow.referencedIds) {
+            parentLayout.findViewById<View>(id)?.let { parentLayout.removeView(it) }
+        }
+
+        val ids = mutableListOf<Int>()
 
         for (sport in sports) {
             val label = LayoutInflater.from(requireContext()).inflate(
-                R.layout.sport_label, binding.sportsFlow, false
+                R.layout.sport_label, parentLayout, false
             ) as androidx.appcompat.widget.AppCompatTextView
+
             label.text = sport
-            binding.sportsFlow.addView(label)
+            label.id = View.generateViewId()
+
+            parentLayout.addView(label)
+            ids.add(label.id)
         }
+
+        binding.sportsFlow.referencedIds = ids.toIntArray()
     }
 
     private fun setupRecyclerView() {
-        val posts = listOf(
-            Post("Post title", "Post description and something like that"),
-            Post("Post title", "Post description and something like that"),
-            Post("Post title", "Post description and something like that")
-        )
-
-        binding.postsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.postsRecyclerView.adapter = PostsAdapter(posts)
+//        val posts = listOf(
+//            Post("Post title", "Post description and something like that"),
+//            Post("Post title", "Post description and something like that"),
+//            Post("Post title", "Post description and something like that")
+//        )
+//
+//        binding.postsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+//        binding.postsRecyclerView.adapter = PostsAdapter(posts)
     }
 
     private fun logoutUser() {
