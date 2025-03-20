@@ -17,9 +17,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginFragment : Fragment() {
 
@@ -27,6 +29,7 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var mAuth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
     private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreateView(
@@ -41,6 +44,8 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mAuth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -103,29 +108,77 @@ class LoginFragment : Fragment() {
 
     }
 
+    private fun checkIfUserExistsInFirestore(user: FirebaseUser) {
+        val userId = user.uid
+        db.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    Log.d("Firestore", "User already exists in Firestore")
+                    val action = LoginFragmentDirections.actionLoginFragmentToFeedFragment()
+                    findNavController().navigate(action)
+                } else {
+                    saveGoogleUserToFirestore(user)
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.w("Firestore", "Error checking if user exists", e)
+            }
+    }
+
+    private fun saveGoogleUserToFirestore(user: FirebaseUser) {
+        val userId = user.uid
+        val userEmail = user.email
+        val userFirstName = user.displayName?.split(" ")?.get(0) ?: ""
+        val userLastName = user.displayName?.split(" ")?.get(1) ?: ""
+
+        val googleUser = User(
+            firstName = userFirstName,
+            lastName = userLastName,
+            email = userEmail ?: "",
+            isMale = true
+        )
+
+        db.collection("users").document(userId).set(googleUser)
+            .addOnSuccessListener {
+                Log.d("Firestore", "DocumentSnapshot successfully written!")
+                val action = LoginFragmentDirections.actionLoginFragmentToFeedFragment()
+                findNavController().navigate(action)
+            }
+            .addOnFailureListener { e ->
+                Log.w("Firestore", "Error writing document", e)
+            }
+    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            val account = task.result
-            if (account != null) {
-                firebaseAuthWithGoogle(account)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                if (account != null) {
+                    firebaseAuthWithGoogle(account)
+                }
+            } catch (e: ApiException) {
+                Log.e("GoogleSignIn", "Google sign-in failed: ${e.statusCode}")
             }
         }
     }
 
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    updateUI(mAuth.currentUser)
-                } else {
-                    Toast.makeText(requireContext(), "Google sign in failed.", Toast.LENGTH_SHORT).show()
-                    updateUI(null)
+        mAuth.signInWithCredential(credential).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // Save Google user to Firestore
+                val user = mAuth.currentUser
+                if (user != null) {
+                    checkIfUserExistsInFirestore(user)
                 }
+            } else {
+                Toast.makeText(requireContext(), "Authentication failed.", Toast.LENGTH_SHORT).show()
             }
+        }
     }
 
     private fun updateUI(user: FirebaseUser?) {
