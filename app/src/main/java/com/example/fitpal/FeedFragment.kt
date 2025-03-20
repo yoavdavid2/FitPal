@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fitpal.adapter.PostsRecyclerAdapter
@@ -65,6 +67,12 @@ class FeedFragment : Fragment() {
                     Log.d("TAG", "On click Activity listener on post $post")
                 }
             }
+        }
+
+        binding?.addPostButton?.setOnClickListener {
+            Log.d("TAG", "Button clicked!")
+            val action = FeedFragmentDirections.actionFeedFragmentToNewPostFragment()
+            findNavController().navigate(action)
         }
 
         return binding?.root

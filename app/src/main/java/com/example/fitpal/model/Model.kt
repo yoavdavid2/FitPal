@@ -85,6 +85,30 @@ class Model private constructor() {
 //        }
     }
 
+    fun like(post: Post, storage: Storage, callback: EmptyCallback) {
+        firebaseModel.add(
+            post,
+            callback = callback
+        )
+//        firebaseModel.add(post) {
+//            image?.let {
+//                uploadTo(
+//                    storage,
+//                    image = image,
+//                    name = student.id,
+//                    callback = { uri ->
+//                        if (!uri.isNullOrBlank()) {
+//                            val st = student.copy(avatarUrl = uri)
+//                            firebaseModel.add(st, callback)
+//                        } else {
+//                            callback()
+//                        }
+//                    },
+//                )
+//            } ?: callback()
+//        }
+    }
+
     fun delete(post: Post, callback: EmptyCallback) {
         firebaseModel.delete(post, callback)
     }
@@ -113,7 +137,7 @@ class Model private constructor() {
 //    ) {
 //        firebaseModel.uploadImage(image, name, callback)
 //    }
-
+//
 //    private fun uploadImageToCloudinary(
 //        bitmap: Bitmap,
 //        name: String,

@@ -48,6 +48,8 @@ class PostViewHolder(
                 updateLikesDisplay()
                 animateLikeButton()
             }
+
+
         }
 
         binding.btnComment.setOnClickListener {
