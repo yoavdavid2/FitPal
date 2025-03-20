@@ -12,10 +12,10 @@ import com.example.fitpal.model.Post
 @Dao
 interface PostDao  {
 
-    @Query("SELECT * FROM Posts")
+    @Query("SELECT * FROM Post")
     fun getAllPosts(): LiveData<List<Post>>
 
-    @Query("SELECT * FROM Posts WHERE id =:id")
+    @Query("SELECT * FROM Post WHERE id =:id")
     fun getPostById(id: String): Post
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

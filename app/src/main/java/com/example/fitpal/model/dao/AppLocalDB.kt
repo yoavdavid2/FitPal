@@ -3,10 +3,13 @@ package com.example.fitpal.model.dao
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.fitpal.base.MyApplication
 import com.example.fitpal.model.Post
+import com.example.fitpal.utils.extensions.Converters
 
-@Database(entities = [Post::class], version = 1)
+@TypeConverters(Converters::class)  // Convert nested types to json and the opposite
+@Database(entities = [Post::class], version = 2)
 abstract class AppLocalDbRepository : RoomDatabase() {
     abstract fun postDao(): PostDao
 }

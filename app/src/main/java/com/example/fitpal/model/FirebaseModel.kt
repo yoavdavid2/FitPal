@@ -36,7 +36,7 @@ class FirebaseModel {
                     true -> {
                         val posts: MutableList<Post> = mutableListOf()
                         for (json in it.result) {
-                            Log.d("TAG", json.toString())
+                            Log.d("TAG_POSTS_JSON", json.toString())
                             posts.add(Post.fromJSON(json.data))
                         }
                         Log.d("TAG", "number of posts: " + posts.size.toString())
@@ -58,16 +58,44 @@ class FirebaseModel {
             .addOnFailureListener { e ->
                 Log.w("TAG", "Error adding document", e)
             }
-
-    //        database.collection(Constants.Collections.POSTS).document(post.id).set(post.json)
-//            .addOnCompleteListener {
-//                callback()
-//            }
-//            .addOnFailureListener {
-//                Log.d("TAG", it.toString() + it.message)
-//            }
     }
 
+    fun like(postId: String, author: String, callback: EmptyCallback) {
+        val postsCollection = database.collection(Constants.Collections.POSTS)
+
+        // Query to find the document where "id" field matches postId
+        postsCollection.whereEqualTo("id", postId).get()
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot.isEmpty) {
+                    Log.w("TAG", "Post not found with id: $postId")
+                    return@addOnSuccessListener
+                }
+
+                val postRef = querySnapshot.documents.first().reference // Get the DocumentReference
+
+                database.runTransaction { transaction ->
+                    val snapshot = transaction.get(postRef)
+
+                    val likes = snapshot.get("likes") as? List<String> ?: emptyList()
+
+                    val updatedLikes = if (likes.contains(author)) {
+                        likes - author // Remove author if they already liked
+                    } else {
+                        likes + author // Add author if they haven't liked
+                    }
+
+                    transaction.update(postRef, "likes", updatedLikes)
+                }.addOnSuccessListener {
+                    Log.d("TAG", "Like list updated successfully")
+                    callback()
+                }.addOnFailureListener { e ->
+                    Log.w("TAG", "Error updating likes", e)
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.w("TAG", "Error fetching post", e)
+            }
+    }
 //    TODO implement delete
     fun delete(student: Post, callback: EmptyCallback) {
 

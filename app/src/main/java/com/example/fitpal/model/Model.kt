@@ -1,6 +1,7 @@
 package com.example.fitpal.model
 
 
+import android.R
 import com.example.fitpal.model.dao.AppLocalDbRepository
 import com.example.fitpal.model.dao.AppLocalDB
 
@@ -85,28 +86,8 @@ class Model private constructor() {
 //        }
     }
 
-    fun like(post: Post, storage: Storage, callback: EmptyCallback) {
-        firebaseModel.add(
-            post,
-            callback = callback
-        )
-//        firebaseModel.add(post) {
-//            image?.let {
-//                uploadTo(
-//                    storage,
-//                    image = image,
-//                    name = student.id,
-//                    callback = { uri ->
-//                        if (!uri.isNullOrBlank()) {
-//                            val st = student.copy(avatarUrl = uri)
-//                            firebaseModel.add(st, callback)
-//                        } else {
-//                            callback()
-//                        }
-//                    },
-//                )
-//            } ?: callback()
-//        }
+    fun like(postId: String, author: String, callback: EmptyCallback) {
+        firebaseModel.like(postId, author, callback)
     }
 
     fun delete(post: Post, callback: EmptyCallback) {

@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.fitpal.adapter.PostsRecyclerAdapter
 import com.example.fitpal.databinding.FragmentFeedBinding
 import com.example.fitpal.databinding.FragmentNewPostBinding
+import com.example.fitpal.model.Comment
 import com.example.fitpal.model.Model
 import com.example.fitpal.model.Post
 import java.util.UUID
@@ -78,8 +79,8 @@ class NewPostFragment : Fragment() {
         val title: String = binding?.postTitle?.text?.toString() ?: ""
         val text: String = binding?.postText?.text?.toString() ?: ""
         val image: String = ""
-        val likes: Int = 0
-        val comments: Int = 0
+        val likes: List<String> = listOf()
+        val comments: List<Comment> = listOf()
         val date: String = binding?.postDate?.text?.toString() ?: ""
         val post = Post(uuid, author, title, text, image, likes, comments, date)
 

@@ -8,23 +8,23 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 
 
-/*
-1. Update json and add updated timestamp
-2. Update fromJson serilise the updated date
-3. Store locally the lastUpdated timestamp
- */
-@Entity(tableName = "posts")
+data class Comment(
+    val author: String,
+    val text: String
+)
+
+@Entity
 data class Post(
     @PrimaryKey val id: String,
     val author: String,
     val title: String,
     val text: String,
     val image: String,
-    var likes: Int = 0,
-    var comments: Int = 0,
+    var likes: List<String>,
+    var comments: List<Comment>,
     val uploadDate: String,
-    val lastUpdated: Long? = null,
-) {
+    val lastUpdated: Long? = null
+){
 
     companion object {
 
@@ -58,9 +58,9 @@ data class Post(
             val title = json[TITLE_KEY] as? String ?: ""
             val text = json[TEXT_KEY] as? String ?: ""
             val image = json[IMAGE_KEY] as? String ?: ""
-            val likes = json[LIKES_KEY] as? Int ?: 0
+            val likes = json[LIKES_KEY] as? List<String> ?: intArrayOf()
             val uploadDate = json[UPLOAD_DATE_KEY] as? String ?: ""
-            val comments = json[COMMENTS_KEY] as? Int ?: 0
+            val comments = json[COMMENTS_KEY] as? List<Comment> ?: intArrayOf()
             val timeStamp = json[LAST_UPDATED] as? Timestamp
             val lastUpdatedLongTimestamp = timeStamp?.toDate()?.time
             return Post(
@@ -69,8 +69,8 @@ data class Post(
                 title = title,
                 text = text,
                 image = image,
-                likes = likes,
-                comments = comments,
+                likes = likes as List<String>,
+                comments = comments as List<Comment>,
                 uploadDate = uploadDate,
                 lastUpdated = lastUpdatedLongTimestamp
             )

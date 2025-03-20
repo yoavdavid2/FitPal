@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.fitpal.OnItemClickListener
 import com.example.fitpal.R
 import com.example.fitpal.databinding.PostListRowBinding
+import com.example.fitpal.model.Model
 import com.example.fitpal.model.Post
 
 class PostViewHolder(
@@ -32,24 +33,24 @@ class PostViewHolder(
         binding.postText.text = post?.text
         binding.postDate.text = post?.uploadDate
 
-        val likesCount = post?.likes ?: 0
-        val commentCount = post?.comments ?: 0
+        val likesCount = post?.likes?.size ?: 0
+        val commentCount = post?.comments?.size ?: 0
 
-        isLiked = (post?.likes ?: 0) > 0
+        isLiked = (post?.likes?.size ?: 0) > 0
 
         binding.likesBadge.text = likesCount.toString()
         binding.commentsBadge.text = commentCount.toString()
 
         binding.btnLike.setOnClickListener {
             isLiked = !isLiked
-
+            val author = "author"
             post?.let {
-                it.likes = if (isLiked) it.likes + 1 else it.likes - 1
+//                it.likes = if (isLiked) it.likes + 1 else it.likes - 1
+                it.likes = if (isLiked) it.likes + author else it.likes - author
+                Model.shared.like(it.id, author, callback = {})
                 updateLikesDisplay()
                 animateLikeButton()
             }
-
-
         }
 
         binding.btnComment.setOnClickListener {
@@ -58,7 +59,7 @@ class PostViewHolder(
     }
 
     private fun updateLikesDisplay() {
-        val likesCount = post?.likes ?: 0
+        val likesCount = post?.likes?.size ?: 0
 
         if (likesCount > 0) {
             binding.likesBadge.visibility = View.VISIBLE
