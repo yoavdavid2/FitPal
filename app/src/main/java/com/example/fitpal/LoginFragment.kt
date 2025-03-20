@@ -134,7 +134,9 @@ class LoginFragment : Fragment() {
             firstName = userFirstName,
             lastName = userLastName,
             email = userEmail ?: "",
-            isMale = true
+            isMale = true,
+            sports = arrayOf("Football", "Basketball", "Tennis"),
+            fp = 0
         )
 
         db.collection("users").document(userId).set(googleUser)

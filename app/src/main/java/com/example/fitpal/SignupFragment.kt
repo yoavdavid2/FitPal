@@ -81,7 +81,7 @@ class SignupFragment : Fragment() {
                             if (task.isSuccessful) {
                                 Log.i("Signup Success", "Email: $email, Password: $password")
 
-                                val user = User(firstName, lastName, email, isMale)
+                                val user = User(firstName, lastName, email, isMale, 0,arrayOf("test"))
 
                                 val userId = mAuth.currentUser?.uid ?: ""
 
