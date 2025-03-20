@@ -135,7 +135,7 @@ class LoginFragment : Fragment() {
             lastName = userLastName,
             email = userEmail ?: "",
             isMale = true,
-            sports = arrayOf("Football", "Basketball", "Tennis"),
+            sports = arrayListOf("Football", "Basketball", "Tennis"),
             fp = 0
         )
 

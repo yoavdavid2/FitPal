@@ -6,5 +6,5 @@ data class User(
     val email: String? = null,
     val isMale: Boolean? = null,
     val fp: Int = 0,
-    val sports: Array<String>
+    val sports: List<String>
 )
