@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         val currentUser = mAuth.currentUser
         if (currentUser != null) {
             navController.navigate(
-                /*R.id.feedFragment*/ R.id.profileFragment,
+                R.id.feedFragment,
                 null,
                 androidx.navigation.NavOptions.Builder()
                     .setPopUpTo(R.id.loginFragment, true)
