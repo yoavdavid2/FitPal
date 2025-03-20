@@ -1,59 +1,111 @@
 package com.example.fitpal
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.fitpal.databinding.FragmentProfileBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+    ): View {
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
+
+
+        binding.logoutButton.setOnClickListener {
+            logoutUser()
+        }
+
+
+        fetchUserData()
+        setupRecyclerView()
+    }
+
+    private fun fetchUserData() {
+        val userId = auth.currentUser?.uid
+
+        if (userId != null) {
+            firestore.collection("users").document(userId)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        val firstName = document.getString("firstName") ?: "User"
+                        val lastName = document.getString("lastName") ?: "Name"
+                        val username = "$firstName $lastName"
+                        val points = document.getLong("fp") ?: 0
+                        val sports = document.get("sports") as? List<String> ?: emptyList()
+
+                        binding.userName.text = username
+                        binding.fpBadge.text = "$points FP"
+
+                        setupSportsLabels(sports)
+                    }
                 }
-            }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(requireContext(), "Error fetching data", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+    private fun setupSportsLabels(sports: List<String>) {
+        binding.sportsFlow.removeAllViews()
+
+        for (sport in sports) {
+            val label = LayoutInflater.from(requireContext()).inflate(
+                R.layout.sport_label, binding.sportsFlow, false
+            ) as androidx.appcompat.widget.AppCompatTextView
+            label.text = sport
+            binding.sportsFlow.addView(label)
+        }
+    }
+
+    private fun setupRecyclerView() {
+        val posts = listOf(
+            Post("Post title", "Post description and something like that"),
+            Post("Post title", "Post description and something like that"),
+            Post("Post title", "Post description and something like that")
+        )
+
+        binding.postsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.postsRecyclerView.adapter = PostsAdapter(posts)
+    }
+
+    private fun logoutUser() {
+        auth.signOut()
+
+        findNavController().navigate(
+            ProfileFragmentDirections.actionProfileFragmentToLoginFragment(),
+            androidx.navigation.NavOptions.Builder()
+                .setPopUpTo(R.id.profileFragment, true)
+                .build()
+        )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
