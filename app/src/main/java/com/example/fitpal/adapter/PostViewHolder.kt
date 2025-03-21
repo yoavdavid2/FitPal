@@ -3,6 +3,7 @@ package com.example.fitpal.adapter
 import android.util.Log
 import android.view.View
 import android.view.animation.ScaleAnimation
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fitpal.OnItemClickListener
 import com.example.fitpal.R
@@ -23,9 +24,13 @@ class PostViewHolder(
             Log.d("TAG", "On click listener on position $adapterPosition")
             listener?.onItemClick(post)
         }
+
+        binding.btnComment.setOnClickListener {
+            listener?.onCommentClick(post?.id ?: "")
+        }
     }
 
-    fun bind(post: Post?, position: Int) {
+    fun bind(post: Post?, position: Int, postId: String) {
         this.post = post
 
         binding.authorImage.setImageResource(R.drawable.ic_profile_filled)
@@ -53,10 +58,9 @@ class PostViewHolder(
             }
         }
 
-        binding.btnComment.setOnClickListener {
-            Log.d("TAG", "Clicked on comments")
-        }
     }
+
+
 
     private fun updateLikesDisplay() {
         val likesCount = post?.likes?.size ?: 0

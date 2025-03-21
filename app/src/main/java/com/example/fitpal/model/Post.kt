@@ -3,15 +3,11 @@ package com.example.fitpal.model
 import android.content.Context
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.fitpal.Comment
 import com.example.fitpal.base.MyApplication
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 
-
-data class Comment(
-    val author: String,
-    val text: String
-)
 
 @Entity
 data class Post(

@@ -2,6 +2,7 @@ package com.example.fitpal.model
 
 import android.graphics.Bitmap
 import android.util.Log
+import com.example.fitpal.Comment
 import com.example.fitpal.base.Constants
 import com.example.fitpal.base.EmptyCallback
 import com.example.fitpal.base.PostsCallback
@@ -96,7 +97,60 @@ class FirebaseModel {
                 Log.w("TAG", "Error fetching post", e)
             }
     }
-//    TODO implement delete
+    fun addComment(postId: String, newComment: Comment, callback: EmptyCallback) {
+        val postsCollection = database.collection(Constants.Collections.POSTS)
+
+        // Query to find the document where "id" field matches postId
+        postsCollection.whereEqualTo("id", postId).get()
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot.isEmpty) {
+                    Log.w("TAG", "Post not found with id: $postId")
+                    return@addOnSuccessListener
+                }
+
+                val postRef = querySnapshot.documents.first().reference // Get the DocumentReference
+
+                database.runTransaction { transaction ->
+                    val snapshot = transaction.get(postRef)
+
+                    val comments = snapshot.get("comments") as? List<String> ?: emptyList()
+                    val updatedComments = comments + newComment
+
+                    transaction.update(postRef, "comments", updatedComments)
+                }.addOnSuccessListener {
+                    Log.d("TAG", "Comment list updated successfully")
+                    callback()
+                }.addOnFailureListener { e ->
+                    Log.w("TAG", "Error updating comment", e)
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.w("TAG", "Error fetching post", e)
+            }
+    }
+
+    fun getPostById(postId: String, callback: (Post?) -> Unit) {
+        Log.d("TAG", "getPostById: $postId")
+        database.collection(Constants.Collections.POSTS)
+            .whereEqualTo("id", postId)
+            .get()
+            .addOnCompleteListener {
+                when (it.isSuccessful) {
+                    true -> {
+                        Log.d("TAG_res_getPostById", it.result.toString())
+                        if (it.result.isEmpty) {
+                            callback(null)
+                            return@addOnCompleteListener
+                        }
+                        val post: Post = Post.fromJSON(it.result.first().data)
+                        callback(post)
+                    }
+
+                    false -> callback(null)
+                }
+            }
+    }
+
     fun delete(student: Post, callback: EmptyCallback) {
 
     }

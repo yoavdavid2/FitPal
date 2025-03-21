@@ -1,6 +1,6 @@
 package com.example.fitpal.utils.extensions
 import androidx.room.TypeConverter
-import com.example.fitpal.model.Comment
+import com.example.fitpal.Comment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

@@ -4,14 +4,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.fitpal.Comment
 import com.example.fitpal.base.MyApplication
 import com.example.fitpal.model.Post
 import com.example.fitpal.utils.extensions.Converters
 
 @TypeConverters(Converters::class)  // Convert nested types to json and the opposite
-@Database(entities = [Post::class], version = 2)
+@Database(entities = [Post::class, Comment::class], version = 3)
 abstract class AppLocalDbRepository : RoomDatabase() {
     abstract fun postDao(): PostDao
+    abstract fun commentsDao(): CommentsDao
 }
 
 object AppLocalDB {

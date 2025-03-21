@@ -14,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.fitpal.adapter.PostsRecyclerAdapter
 import com.example.fitpal.databinding.FragmentFeedBinding
 import com.example.fitpal.databinding.FragmentNewPostBinding
-import com.example.fitpal.model.Comment
 import com.example.fitpal.model.Model
 import com.example.fitpal.model.Post
 import java.util.UUID
@@ -54,19 +53,6 @@ class NewPostFragment : Fragment() {
         binding?.takePhotoButton?.setOnClickListener {
             cameraLauncher?.launch(null)
         }
-
-//        binding?.cancelButton?.setOnClickListener {
-//            Log.d("TAG", "Button clicked!")
-//            val action = NewPostFragmentDirections.actionNewPostFragmentToFeedFragment()
-//            findNavController().navigate(action)
-//        }
-//
-//        binding?.toolbar?.setNavigationOnClickListener {
-//            Log.d("TAG", "Button clicked!")
-//            val action = NewPostFragmentDirections.actionNewPostFragmentToFeedFragment()
-//            findNavController().navigate(action)
-//        }
-
 
         return binding?.root
     }

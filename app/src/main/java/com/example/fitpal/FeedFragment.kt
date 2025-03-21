@@ -67,6 +67,12 @@ class FeedFragment : Fragment() {
                     Log.d("TAG", "On click Activity listener on post $post")
                 }
             }
+
+            override fun onCommentClick(postId: String) {
+                Log.d("TAG", "Clicked on comments for post ID: $postId")
+                val action = FeedFragmentDirections.actionFeedFragmentToPostCommentsFragment(postId)
+                findNavController().navigate(action)
+            }
         }
 
         binding?.addPostButton?.setOnClickListener {

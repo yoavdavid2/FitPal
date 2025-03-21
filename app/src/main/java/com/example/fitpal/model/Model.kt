@@ -1,16 +1,14 @@
 package com.example.fitpal.model
 
 
-import android.R
 import com.example.fitpal.model.dao.AppLocalDbRepository
 import com.example.fitpal.model.dao.AppLocalDB
 
 import android.graphics.Bitmap
-import android.os.Looper
 import android.util.Log
-import androidx.core.os.HandlerCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.fitpal.Comment
 import com.example.fitpal.base.EmptyCallback
 import java.util.concurrent.Executors
 
@@ -31,6 +29,10 @@ class Model private constructor() {
 
     val posts: LiveData<List<Post>>
         get() = database.postDao().getAllPosts()
+
+    val comments: LiveData<List<Comment>>
+        get() = MutableLiveData(emptyList())
+
     val loadingState: MutableLiveData<LoadingState> = MutableLiveData<LoadingState>()
 
     private val firebaseModel = FirebaseModel()
@@ -62,6 +64,34 @@ class Model private constructor() {
         loadingState.postValue(LoadingState.LOADED)
     }
 
+    fun refreshComments(postId: String) {
+        firebaseModel.getPostById(postId) { post ->
+            executor.execute {
+                Log.d("TAG_post", "post: " + post.toString())
+                Log.d("TAG_post_comments", "comments: " + post?.comments.toString())
+                if (post?.comments == null) {
+                    return@execute
+                }
+                var c = post.comments
+                for (comment in c) {
+                    Log.d("TAG_cccccccc", comment.toString())
+                    database.commentsDao().insertAll(comment)
+                }
+//                        val comment = Comment.fromMap(commentMap as Map<String, Any>)
+//                post?.comments?.forEach { commentMap ->
+//                    try {
+//                        Log.d("TAG_comment", "comment: " + commentMap.toString())
+//                        // Convert HashMap to Comment
+//                        // Insert into the database
+//                        database.commentsDao().insertAll(comment)
+//                    } catch (e: Exception) {
+//                        Log.e("TAG", "Error converting comment", e)
+//                    }
+//                }
+            }
+        }
+    }
+
     fun add(post: Post, image: Bitmap?, storage: Storage, callback: EmptyCallback) {
         firebaseModel.add(
             post,
@@ -84,6 +114,14 @@ class Model private constructor() {
 //                )
 //            } ?: callback()
 //        }
+    }
+
+    fun getPostById(postId: String, callback: (Post?) -> Unit) {
+        firebaseModel.getPostById(postId, callback)
+    }
+
+    fun addComment(postId: String, comment: Comment, callback: EmptyCallback) {
+        firebaseModel.addComment(postId, comment, callback)
     }
 
     fun like(postId: String, author: String, callback: EmptyCallback) {

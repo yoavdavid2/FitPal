@@ -21,7 +21,8 @@ class PostsRecyclerAdapter(var posts: List<Post>?) : RecyclerView.Adapter<PostVi
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         holder.bind(
             post = posts?.get(position),
-            position = position
+            position = position,
+            postId = posts?.get(position)?.id ?: ""
         )
     }
 }
