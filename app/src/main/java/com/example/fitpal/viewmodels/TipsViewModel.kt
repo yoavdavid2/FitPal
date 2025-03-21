@@ -1,21 +1,23 @@
 package com.example.fitpal.viewmodels
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.fitpal.model.dao.AppLocalDB
 import com.example.fitpal.model.fitness.entities.Article
 import com.example.fitpal.model.fitness.entities.Tip
 import com.example.fitpal.model.fitness.entities.WorkoutPlan
-import com.example.fitpal.services.GeminiService
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 class TipsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val executor: Executor = Executors.newSingleThreadExecutor()
+    private val database = AppLocalDB.database
+    private val sharedPreferences =
+        application.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
@@ -32,7 +34,6 @@ class TipsViewModel(application: Application) : AndroidViewModel(application) {
     private val _workoutPlans = MutableLiveData<List<WorkoutPlan>>()
     val workoutPlans: LiveData<List<WorkoutPlan>> = _workoutPlans
 
-    private val database = AppLocalDB.database
 
     init {
         _tips.value = emptyList()
@@ -98,5 +99,13 @@ class TipsViewModel(application: Application) : AndroidViewModel(application) {
                 _loading.postValue(false)
             }
         }
+    }
+
+    fun canGenerateContent(): Boolean {
+        val lastGeneratedTime = sharedPreferences.getLong("last_content_generation_time", 0)
+        val currentTime = System.currentTimeMillis()
+        val twentyFourHoursInMillis = 24 * 60 * 60 * 1000L
+
+        return (currentTime - lastGeneratedTime) < twentyFourHoursInMillis
     }
 }

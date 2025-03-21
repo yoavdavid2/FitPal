@@ -1,5 +1,6 @@
 package com.example.fitpal
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,8 @@ import com.example.fitpal.model.fitness.entities.WorkoutPlan
 import com.example.fitpal.services.GeminiService
 import com.example.fitpal.services.GeminiService.ContentCallback
 import com.example.fitpal.viewmodels.TipsViewModel
+import com.google.android.material.snackbar.Snackbar
+import androidx.core.content.edit
 
 class TipsFragment : Fragment(), ContentCallback {
     private var binding: FragmentTipsBinding? = null
@@ -142,6 +145,15 @@ class TipsFragment : Fragment(), ContentCallback {
     }
 
     private fun generateContent() {
+        if (!viewModel.canGenerateContent()) {
+            binding?.apply {
+                errorLayout.visibility = View.VISIBLE
+                errorText.text = "Reached content generating limit. Try again tomorrow."
+            }
+
+            return
+        }
+
         hideError()
         hideEmptyStates()
         showLoading(true)
@@ -164,12 +176,14 @@ class TipsFragment : Fragment(), ContentCallback {
                 progressBar.visibility = View.VISIBLE
                 progressBar.alpha = 0f
                 progressBar.animate().alpha(1f).setDuration(200).start()
+                generateContentButton.isEnabled = false
             }
         } else {
             binding?.apply {
                 progressBar.animate().alpha(0f).setDuration(200).withEndAction {
                     progressBar.visibility = View.GONE
                 }.start()
+                generateContentButton.isEnabled = true
             }
         }
     }
@@ -190,7 +204,15 @@ class TipsFragment : Fragment(), ContentCallback {
         articles: List<Article>,
         workoutPlans: List<WorkoutPlan>,
     ) {
+        saveGenerationTime()
         viewModel.saveContent(tips, articles, workoutPlans)
+    }
+
+    private fun saveGenerationTime() {
+        val sharedPreferences = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        sharedPreferences.edit() {
+            putLong("last_content_generation_time", System.currentTimeMillis())
+        }
     }
 
     override fun onError(error: String) {
