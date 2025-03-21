@@ -10,6 +10,6 @@ class CommentListViewModel: ViewModel() {
     val comments: LiveData<List<Comment>> = Model.Companion.shared.comments
 
     fun refreshComments(postId: String) {
-        Model.Companion.shared.refreshComments(postId)
+        Model.shared.refreshComments(postId)
     }
 }

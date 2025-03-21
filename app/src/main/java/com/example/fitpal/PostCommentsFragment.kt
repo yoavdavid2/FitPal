@@ -1,22 +1,19 @@
 package com.example.fitpal
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fitpal.adapter.CommentsRecyclerAdapter
-import com.example.fitpal.adapter.PostsRecyclerAdapter
-import com.example.fitpal.databinding.FragmentFeedBinding
 import com.example.fitpal.databinding.FragmentPostCommentsBinding
 import com.example.fitpal.model.Model
 import com.example.fitpal.viewmodels.CommentListViewModel
-import com.example.fitpal.viewmodels.PostsListViewModel
 import java.util.UUID
-import kotlin.getValue
 
 
 private const val ARG_PARAM_POST_ID = "postId"
@@ -39,21 +36,25 @@ class PostCommentsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentPostCommentsBinding.inflate(inflater, container, false)
         binding?.toolbar?.setNavigationOnClickListener(::onCancelClick)
 
         val commentsRecyclerView: RecyclerView? = binding?.commentsRecyclerView
         commentsRecyclerView?.setHasFixedSize(true)
+        commentsRecyclerView?.layoutManager = LinearLayoutManager(requireContext())
 
+        adapter = CommentsRecyclerAdapter(viewModel.comments.value)
+        commentsRecyclerView?.adapter = adapter
 
         Model.shared.getPostById(postId!!) { post ->
-//            binding?.imageView = ''
-            binding?.toolbar?.title = "Comments on " + post?.title
-            binding?.postDate?.text = post?.uploadDate
-            binding?.postText?.text = post?.text
-            binding?.postAuthor?.text = post?.author
+            binding?.apply {
+                toolbar.title = "Comments on " + post?.title
+                postDate.text = post?.uploadDate
+                postText.text = post?.text
+                postAuthor.text = post?.author
+            }
         }
 
         getCommentsOnPosts(postId!!)
@@ -88,7 +89,7 @@ class PostCommentsFragment : Fragment() {
 
     private fun getCommentsOnPosts(postId: String) {
         binding?.progressBar?.visibility = View.VISIBLE
-        Model.shared.refreshComments(postId)
+        viewModel.refreshComments(postId)
     }
 
     companion object {
