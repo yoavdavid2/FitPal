@@ -3,8 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.androidx.navigation.safeargs)
     id("kotlin-kapt")
-    alias(libs.plugins.google.services)
-    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
@@ -23,7 +21,7 @@ android {
 
         buildConfigField("String", "PLACES_API_URL", "\"${project.properties["PLACES_API_URL"] ?: ""}\"")
         buildConfigField("String", "MAPS_API_URL", "\"${project.properties["MAPS_API_URL"] ?: ""}\"")
-        buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${project.properties["GOOGLE_MAPS_API_KEY"] ?: ""}\"")
+        buildConfigField("String", "GEMINI_API_URL", "\"${project.properties["GEMINI_API_URL"] ?: ""}\"")
     }
 
     buildTypes {
@@ -46,7 +44,6 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
-        compose = true
     }
 }
 
@@ -59,30 +56,19 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui)
-
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.swiperefreshlayout)
 
     // ROOM
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.google.places)
     kapt(libs.androidx.room.compiler)
-    implementation(libs.picasso)
 
     // Firebase
     implementation(platform(libs.firebase.bom))
-
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.firebase.auth.ktx)
-    implementation(libs.firebase.firestore.ktx)
-    implementation(libs.constraintlayout)
-
     implementation(libs.firebase.firestore)
 
     implementation(libs.firebase.storage)
@@ -98,19 +84,14 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.converter.gson)
 
+    // Gemini
+    implementation(libs.generativeai)
+
+    //Picasso
+    implementation(libs.picasso)
 
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-    implementation("com.google.firebase:firebase-auth:22.0.0")
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
-
-
-
 }
-

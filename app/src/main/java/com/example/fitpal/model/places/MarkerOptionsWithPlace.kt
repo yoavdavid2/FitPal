@@ -1,6 +1,5 @@
-package com.example.fitpal.model
+package com.example.fitpal.model.places
 
-import com.example.fitpal.model.places.Place
 import com.google.android.gms.maps.model.MarkerOptions
 
 data class MarkerOptionsWithPlace(
