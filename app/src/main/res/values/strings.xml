@@ -2,4 +2,24 @@
     <string name="app_name">FitPal</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="welcome_to_fitpal">Welcome to FitPal</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="or">OR</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="profile">Profile</string>
+    <string name="email_address">Email Address</string>
+    <string name="sign_up_to_fitpal">Sign up to FitPal</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="default_web_client_id">656865816608-lqdlcbph6jp7c6tvc1g0gnbtm1oq8g5d.apps.googleusercontent.com</string>
+    <string name="label">Label</string>
+    <string name="like_button">Like button</string>
+    <string name="comments">Comments</string>
+
 </resources>
