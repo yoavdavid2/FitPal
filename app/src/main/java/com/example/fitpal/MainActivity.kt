@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.fitpal.databinding.ActivityMainBinding
 import com.google.android.libraries.places.api.Places
+import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
 

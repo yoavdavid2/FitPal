@@ -33,7 +33,9 @@
         tools:layout="@layout/fragment_messages" >
         <action
             android:id="@+id/action_messagesFragment_to_chatFragment"
-            app:destination="@id/chatFragment" />
+            app:destination="@id/chatFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_messagesFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
