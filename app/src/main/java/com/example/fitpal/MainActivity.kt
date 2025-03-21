@@ -11,48 +11,50 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.fitpal.databinding.ActivityMainBinding
-import com.google.firebase.auth.FirebaseAuth
-
 import com.example.fitpal.model.Post
 import com.google.android.libraries.places.api.Places
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 
 interface OnItemClickListener {
     fun onItemClick(position: Int)
     fun onItemClick(student: Post?)
 }
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var navController: NavController? = null
+    private lateinit var navController: NavController
     private lateinit var mAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Places.initialize(applicationContext, BuildConfig.GOOGLE_MAPS_API_KEY)
+
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         mAuth = FirebaseAuth.getInstance()
-        val navHostController =
-            supportFragmentManager.findFragmentById(binding.mainNavFragment.id) as? NavHostFragment
-        navController = navHostController?.navController
 
-        navController?.let { navController ->
-            binding.bottomNavigationBar.setupWithNavController(navController)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(binding.mainNavFragment.id) as NavHostFragment
+        navController = navHostFragment.navController
 
-            navController.addOnDestinationChangedListener { _, destination, _ ->
-                when (destination.id) {
-                    R.id.loginFragment, R.id.signupFragment -> {
-                        binding.bottomNavigationBar.visibility = View.GONE
-                    }
-                    else -> {
-                        binding.bottomNavigationBar.visibility = View.VISIBLE
-                    }
+        binding.bottomNavigationBar.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.loginFragment, R.id.signupFragment -> {
+                    binding.bottomNavigationBar.visibility = View.GONE
+                }
+
+                else -> {
+                    binding.bottomNavigationBar.visibility = View.VISIBLE
                 }
             }
+        }
 
         val currentUser = mAuth.currentUser
         if (currentUser != null) {
@@ -63,7 +65,6 @@ class MainActivity : AppCompatActivity() {
                     .setPopUpTo(R.id.loginFragment, true)
                     .build()
             )
-
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -72,18 +73,13 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-
-            onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (!navController.popBackStack()) {
-                        isEnabled = false
-                        onBackPressedDispatcher.onBackPressed()
-                    }
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (!navController.popBackStack()) {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
                 }
-            })
-        }
-
-        FirebaseApp.initializeApp(this);
-        Places.initialize(applicationContext, BuildConfig.GOOGLE_MAPS_API_KEY)
+            }
+        })
     }
 }

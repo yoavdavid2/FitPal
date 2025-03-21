@@ -27,6 +27,7 @@ navigationSafeArgsGradlePlugin = "2.8.9"
 navigationUiKtx = "2.8.9"
 picasso = "2.8"
 places = "4.2.0"
+playServicesAuth = "21.3.0"
 playServicesLocation = "21.3.0"
 playServicesMaps = "19.1.0"
 retrofit = "2.11.0"
@@ -79,6 +80,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }

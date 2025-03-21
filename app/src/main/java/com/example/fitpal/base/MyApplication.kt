@@ -3,6 +3,7 @@ package com.example.fitpal.base
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import com.google.firebase.FirebaseApp
 
 class MyApplication: Application() {
     @SuppressLint("StaticFieldLeak")
@@ -13,5 +14,6 @@ class MyApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         Globals.context = applicationContext
+        FirebaseApp.initializeApp(this)
     }
 }

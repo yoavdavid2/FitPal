@@ -19,7 +19,6 @@ class FirebaseModel {
     private val storage = Firebase.storage
 
     init {
-
         val settings = firestoreSettings {
             setLocalCacheSettings(memoryCacheSettings {  })
         }

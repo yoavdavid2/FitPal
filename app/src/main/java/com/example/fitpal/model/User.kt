@@ -1,4 +1,4 @@
-package com.example.fitpal
+package com.example.fitpal.model
 
 data class User(
     val firstName: String? = null,

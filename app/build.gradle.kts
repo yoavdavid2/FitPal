@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.androidx.navigation.safeargs)
     id("kotlin-kapt")
     alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -70,8 +71,9 @@ dependencies {
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
-
+    implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.storage)
+    implementation(libs.play.services.auth)
 
     // Maps
     implementation(libs.android.sdk)

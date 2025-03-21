@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.fitpal.databinding.FragmentSignupBinding
+import com.example.fitpal.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -110,7 +111,14 @@ class SignupFragment : Fragment() {
                             if (task.isSuccessful) {
                                 Log.i("Signup Success", "Email: $email, Password: $password")
 
-                                val user = User(firstName, lastName, email, isMale, 0, selectedSports.toList())
+                                val user = User(
+                                    firstName,
+                                    lastName,
+                                    email,
+                                    isMale,
+                                    0,
+                                    selectedSports.toList()
+                                )
 
                                 val userId = mAuth.currentUser?.uid ?: ""
 
