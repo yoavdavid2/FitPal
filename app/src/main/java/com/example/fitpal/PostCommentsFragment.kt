@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fitpal.adapter.CommentsRecyclerAdapter
@@ -39,7 +40,6 @@ class PostCommentsFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentPostCommentsBinding.inflate(inflater, container, false)
-        binding?.toolbar?.setNavigationOnClickListener(::onCancelClick)
 
         val commentsRecyclerView: RecyclerView? = binding?.commentsRecyclerView
         commentsRecyclerView?.setHasFixedSize(true)
@@ -50,7 +50,6 @@ class PostCommentsFragment : Fragment() {
 
         Model.shared.getPostById(postId!!) { post ->
             binding?.apply {
-                toolbar.title = "Comments on " + post?.title
                 postDate.text = post?.uploadDate
                 postText.text = post?.text
                 postAuthor.text = post?.author
@@ -65,19 +64,36 @@ class PostCommentsFragment : Fragment() {
 
             binding?.progressBar?.visibility = View.GONE
             if (comments.isEmpty()) {
-                binding?.noCommets?.visibility = View.VISIBLE
+                binding?.noComments?.visibility = View.VISIBLE
             } else {
-                binding?.noCommets?.visibility = View.GONE
+                binding?.noComments?.visibility = View.GONE
             }
         }
 
-        binding?.saveButton?.setOnClickListener {
-            val newComment = binding?.newComment?.text.toString()
-            val CONST_AUTHOR = "author" //TODO get user Email
-            val uuid: String = UUID.randomUUID().toString()
-            val c = Comment(uuid, CONST_AUTHOR, newComment)
-            Model.shared.addComment(postId!!, c, callback = {})
-            binding?.newComment?.setText("")
+        binding?.apply {
+            saveButton.setOnClickListener {
+                val newComment = binding?.newComment?.text.toString()
+                val CONST_AUTHOR = "author" //TODO get user Email
+                val uuid: String = UUID.randomUUID().toString()
+                val c = Comment(uuid, CONST_AUTHOR, newComment)
+                Model.shared.addComment(postId!!, c) { success ->
+                    if (success) {
+                        viewModel.refreshComments(postId!!)
+                        binding?.newComment?.setText("")
+                    } else {
+                        progressBar.visibility = View.GONE
+                    }
+                }
+            }
+
+            backButton.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
+            swipeRefreshLayout.setOnRefreshListener {
+                getCommentsOnPosts(postId!!)
+                swipeRefreshLayout.isRefreshing = false
+            }
         }
 
         return binding?.root

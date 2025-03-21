@@ -146,7 +146,7 @@ class Model private constructor() {
         firebaseModel.getPostById(postId, callback)
     }
 
-    fun addComment(postId: String, comment: Comment, callback: EmptyCallback) {
+    fun addComment(postId: String, comment: Comment, callback: (Boolean) -> Unit) {
         firebaseModel.addComment(postId, comment, callback)
     }
 
