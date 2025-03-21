@@ -116,7 +116,6 @@ class SignupFragment : Fragment() {
                                     lastName,
                                     email,
                                     isMale,
-                                    0,
                                     selectedSports.toList()
                                 )
 

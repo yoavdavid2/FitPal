@@ -69,7 +69,6 @@ class ProfileFragment : Fragment() {
                         val sports = document.get("sports") as? List<String> ?: emptyList()
 
                         binding?.userName?.text = username
-                        binding?.fpBadge?.text = "$points FP"
 
                         setupSportsLabels(sports)
                     }
