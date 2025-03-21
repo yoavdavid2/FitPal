@@ -19,5 +19,45 @@
         android:name="com.example.fitpal.MapFragment"
         android:label="Map"
         tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/tipsFragment"
+        android:name="com.example.fitpal.TipsFragment"
+        android:label="Tips"
+        tools:layout="@layout/fragment_tips" >
+        <action
+            android:id="@+id/actionTipsFragmentToArticleDetailFragment"
+            app:destination="@id/articleDetailsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/actionTipsFragmentToWorkoutDetailFragment"
+            app:destination="@id/workoutDetailsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/articleDetailsFragment"
+        android:name="com.example.fitpal.ArticleDetailsFragment"
+        android:label="Article details"
+        tools:layout="@layout/fragment_article_detail">
+        <argument
+            android:name="articleId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/workoutDetailsFragment"
+        android:name="com.example.fitpal.WorkoutDetailsFragment"
+        android:label="Workout Plan details"
+        tools:layout="@layout/fragment_workout_details">
+        <argument
+            android:name="workoutPlanId"
+            app:argType="string" />
+    </fragment>
+
 
 </navigation>

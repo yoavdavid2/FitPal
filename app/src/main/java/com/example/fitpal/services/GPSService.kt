@@ -1,4 +1,4 @@
-package com.example.fitpal
+package com.example.fitpal.services
 
 import android.app.Service
 import android.content.Intent

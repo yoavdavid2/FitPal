@@ -21,6 +21,7 @@ android {
 
         buildConfigField("String", "PLACES_API_URL", "\"${project.properties["PLACES_API_URL"] ?: ""}\"")
         buildConfigField("String", "MAPS_API_URL", "\"${project.properties["MAPS_API_URL"] ?: ""}\"")
+        buildConfigField("String", "GEMINI_API_URL", "\"${project.properties["GEMINI_API_URL"] ?: ""}\"")
     }
 
     buildTypes {
@@ -61,6 +62,10 @@ dependencies {
     // ROOM
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.fragment.ktx)
     kapt(libs.androidx.room.compiler)
 
     // Firebase
@@ -79,6 +84,12 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.gson)
     implementation(libs.converter.gson)
+
+    // Gemini
+    implementation(libs.generativeai)
+
+    //Picasso
+    implementation(libs.picasso)
 
     // Testing
     testImplementation(libs.junit)

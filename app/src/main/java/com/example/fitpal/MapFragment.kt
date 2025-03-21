@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.fitpal.databinding.FragmentMapBinding
-import com.example.fitpal.model.MarkerOptionsWithPlace
+import com.example.fitpal.model.places.MarkerOptionsWithPlace
 import com.example.fitpal.model.places.Place
 import com.example.fitpal.utils.extensions.toCapital
 import com.example.fitpal.viewmodels.MapViewModel

@@ -10,7 +10,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.fitpal.model.MarkerOptionsWithPlace
+import com.example.fitpal.model.places.MarkerOptionsWithPlace
 import com.example.fitpal.model.places.Place
 import com.example.fitpal.repositories.PlacesRepository
 import com.google.android.gms.location.FusedLocationProviderClient
