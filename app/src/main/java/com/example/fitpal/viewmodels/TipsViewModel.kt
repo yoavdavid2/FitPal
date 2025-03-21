@@ -103,6 +103,10 @@ class TipsViewModel(application: Application) : AndroidViewModel(application) {
 
     fun canGenerateContent(): Boolean {
         val lastGeneratedTime = sharedPreferences.getLong("last_content_generation_time", 0)
+        if (lastGeneratedTime == 0L) {
+          return true
+        }
+
         val currentTime = System.currentTimeMillis()
         val twentyFourHoursInMillis = 24 * 60 * 60 * 1000L
 
