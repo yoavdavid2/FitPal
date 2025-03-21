@@ -133,8 +133,7 @@ class LoginFragment : Fragment() {
             lastName = userLastName,
             email = userEmail ?: "",
             isMale = true,
-            sports = arrayListOf("Football", "Basketball", "Tennis"),
-            fp = 0
+            sports = arrayListOf("Football", "Basketball", "Tennis")
         )
 
         db.collection("users").document(userId).set(googleUser)
