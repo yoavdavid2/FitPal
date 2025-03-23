@@ -1,59 +1,81 @@
 package com.example.fitpal
 
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.registerForActivityResult
+import androidx.navigation.Navigation
+import com.example.fitpal.databinding.FragmentAddPostBinding
+import com.example.fitpal.model.Model
+import com.example.fitpal.model.Post
+import java.util.UUID
+import androidx.navigation.findNavController
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AddPostFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AddPostFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var binding: FragmentAddPostBinding? = null
+    private var cameraLauncher: ActivityResultLauncher<Void?>? = null
+    private var didSetProfileImage = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_post, container, false)
+        binding = FragmentAddPostBinding.inflate(inflater, container, false)
+
+        binding?.apply {
+            saveButton.setOnClickListener(::onSaveClicked)
+            cancelButton.setOnClickListener(::onCancelClicked)
+            cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {bitmap ->
+                imageView.setImageBitmap(bitmap)
+                didSetProfileImage = true
+            }
+
+            takePhotoButton.setOnClickListener {
+                cameraLauncher?.launch(null)
+            }
+        }
+        return binding?.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddPostFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddPostFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    private fun onSaveClicked(view: View) {
+        Log.d("TAG", "SaveButton clicked!")
+
+        val uuid: String = UUID.randomUUID().toString()
+        val author: String = "**************temp-author**************" //TODO get user Email
+        val title: String = binding?.titleTextView?.text?.toString() ?: ""
+        val text: String = binding?.textTextView?.text?.toString() ?: ""
+        val image: String = ""
+        val likes: List<String> = listOf()
+        val comments: List<Comment> = listOf()
+        val date: String = binding?.dateEditText?.text?.toString() ?: ""
+        val post = Post(uuid, author, title, text, image, likes, comments, date)
+
+        binding?.progressBar?.visibility = View.VISIBLE
+
+        if (didSetProfileImage) {
+            binding?.imageView?.isDrawingCacheEnabled = true
+            binding?.imageView?.buildDrawingCache()
+            val bitmap = (binding?.imageView?.drawable as BitmapDrawable).bitmap
+
+            Model.shared.add(post, bitmap, Model.Storage.CLOUDINARY) {
+                binding?.progressBar?.visibility = View.GONE
+                Navigation.findNavController(view).popBackStack()
             }
+        } else {
+            Model.shared.add(post, null, Model.Storage.CLOUDINARY) {
+                binding?.progressBar?.visibility = View.GONE
+                Navigation.findNavController(view).popBackStack()
+            }
+        }
+    }
+
+    private fun onCancelClicked(view: View) {
+        view.findNavController().popBackStack()
     }
 }

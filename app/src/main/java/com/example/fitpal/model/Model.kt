@@ -31,7 +31,7 @@ class Model private constructor() {
         get() = database.postDao().getAllPosts()
 
     val comments: LiveData<List<Comment>>
-        get() = MutableLiveData(emptyList())
+        get() = database.commentsDao().getAllComments()
 
     val loadingState: MutableLiveData<LoadingState> = MutableLiveData<LoadingState>()
 
@@ -72,10 +72,36 @@ class Model private constructor() {
                 if (post?.comments == null) {
                     return@execute
                 }
-                var c = post.comments
-                for (comment in c) {
-                    Log.d("TAG_cccccccc", comment.toString())
-                    database.commentsDao().insertAll(comment)
+                val commentsList = post.comments as List<*>
+                for (i in commentsList.indices) {
+                    try {
+                        val item = commentsList[i]
+                        Log.d("TAG_item_type", "Item type: " + (item?.javaClass?.name ?: "null"))
+
+                        if (item is Map<*, *>) {
+                            @Suppress("UNCHECKED_CAST")
+                            val commentMap = item as Map<String, Any>
+
+                            // Create a Comment from the map
+                            val commentObj = Comment(
+                                id = commentMap["id"] as? String ?: "",
+                                author = commentMap["author"] as? String ?: "",
+                                text = commentMap["text"] as? String ?: ""
+                            )
+
+                            // Log the created object
+                            Log.d("TAG_comment_created", "Comment: $commentObj")
+
+                            // Insert the created object
+                            database.commentsDao().insertAll(commentObj)
+                            Log.d("TAG_comment_inserted", "Comment inserted successfully")
+                        } else {
+                            Log.d("TAG_item_not_map", "Item is not a Map")
+                        }
+                    } catch (e: Exception) {
+                        Log.e("TAG_error", "Error processing comment at index $i", e)
+                        e.printStackTrace()
+                    }
                 }
 //                        val comment = Comment.fromMap(commentMap as Map<String, Any>)
 //                post?.comments?.forEach { commentMap ->
@@ -120,7 +146,7 @@ class Model private constructor() {
         firebaseModel.getPostById(postId, callback)
     }
 
-    fun addComment(postId: String, comment: Comment, callback: EmptyCallback) {
+    fun addComment(postId: String, comment: Comment, callback: (Boolean) -> Unit) {
         firebaseModel.addComment(postId, comment, callback)
     }
 

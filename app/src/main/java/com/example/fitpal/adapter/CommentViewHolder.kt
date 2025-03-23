@@ -15,8 +15,9 @@ class CommentViewHolder(
 
     fun bind(comment: Comment?,  position: Int, postId: String) {
         this.comment = comment
-
-        binding.author.text = comment?.author
-        binding.text.text = comment?.text
+        binding.apply {
+            author.text = comment?.author
+            text.text = comment?.text
+        }
     }
 }

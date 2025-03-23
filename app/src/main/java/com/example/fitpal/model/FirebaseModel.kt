@@ -97,7 +97,7 @@ class FirebaseModel {
                 Log.w("TAG", "Error fetching post", e)
             }
     }
-    fun addComment(postId: String, newComment: Comment, callback: EmptyCallback) {
+    fun addComment(postId: String, newComment: Comment, callback: (Boolean) -> Unit) {
         val postsCollection = database.collection(Constants.Collections.POSTS)
 
         // Query to find the document where "id" field matches postId
@@ -119,7 +119,6 @@ class FirebaseModel {
                     transaction.update(postRef, "comments", updatedComments)
                 }.addOnSuccessListener {
                     Log.d("TAG", "Comment list updated successfully")
-                    callback()
                 }.addOnFailureListener { e ->
                     Log.w("TAG", "Error updating comment", e)
                 }

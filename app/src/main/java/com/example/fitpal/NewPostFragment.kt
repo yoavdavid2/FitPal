@@ -18,12 +18,6 @@ import com.example.fitpal.model.Model
 import com.example.fitpal.model.Post
 import java.util.UUID
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [NewPostFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class NewPostFragment : Fragment() {
     private var binding: FragmentNewPostBinding? = null
     private var cameraLauncher: ActivityResultLauncher<Void?>? = null

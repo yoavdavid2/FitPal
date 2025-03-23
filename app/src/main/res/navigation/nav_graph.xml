@@ -11,22 +11,19 @@
         android:label="Feed"
         tools:layout="@layout/fragment_feed" >
         <action
-            android:id="@+id/action_feedFragment_to_newPostFragment"
-            app:destination="@id/newPostFragment" />
-        <action
             android:id="@+id/action_feedFragment_to_postCommentsFragment"
-            app:destination="@id/postCommentsFragment" />
+            app:destination="@id/postCommentsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_feedFragment_to_addPostFragment"
+            app:destination="@id/addPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.example.fitpal.MapFragment"
         android:label="Map"
         tools:layout="@layout/fragment_map" />
-    <fragment
-        android:id="@+id/newPostFragment"
-        android:name="com.example.fitpal.NewPostFragment"
-        android:label="fragment_new_post"
-        tools:layout="@layout/fragment_new_post" />
     <fragment
         android:id="@+id/postCommentsFragment"
         android:name="com.example.fitpal.PostCommentsFragment"
@@ -36,5 +33,10 @@
             android:name="postId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/addPostFragment"
+        android:name="com.example.fitpal.AddPostFragment"
+        android:label="Add Post"
+        tools:layout="@layout/fragment_add_post" />
 
 </navigation>

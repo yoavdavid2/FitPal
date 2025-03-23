@@ -77,7 +77,7 @@ class FeedFragment : Fragment() {
 
         binding?.addPostButton?.setOnClickListener {
             Log.d("TAG", "Button clicked!")
-            val action = FeedFragmentDirections.actionFeedFragmentToNewPostFragment()
+            val action = FeedFragmentDirections.actionFeedFragmentToAddPostFragment()
             findNavController().navigate(action)
         }
 
