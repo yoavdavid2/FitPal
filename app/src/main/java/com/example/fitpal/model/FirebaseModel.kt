@@ -118,8 +118,10 @@ class FirebaseModel {
 
                     transaction.update(postRef, "comments", updatedComments)
                 }.addOnSuccessListener {
+                    return@addOnSuccessListener
                     Log.d("TAG", "Comment list updated successfully")
                 }.addOnFailureListener { e ->
+                    return@addOnFailureListener
                     Log.w("TAG", "Error updating comment", e)
                 }
             }

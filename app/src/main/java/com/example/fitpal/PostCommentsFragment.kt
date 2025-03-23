@@ -1,6 +1,7 @@
 package com.example.fitpal
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,8 @@ class PostCommentsFragment : Fragment() {
         adapter = CommentsRecyclerAdapter(viewModel.comments.value)
         commentsRecyclerView?.adapter = adapter
 
+        getCommentsOnPosts(postId.toString())
+
         Model.shared.getPostById(postId!!) { post ->
             binding?.apply {
                 postDate.text = post?.uploadDate
@@ -55,8 +58,6 @@ class PostCommentsFragment : Fragment() {
                 postAuthor.text = post?.author
             }
         }
-
-        getCommentsOnPosts(postId!!)
 
         viewModel.comments.observe(viewLifecycleOwner) { comments ->
             adapter?.comments = comments
@@ -79,11 +80,11 @@ class PostCommentsFragment : Fragment() {
                 Model.shared.addComment(postId!!, c) { success ->
                     if (success) {
                         viewModel.refreshComments(postId!!)
-                        binding?.newComment?.setText("")
                     } else {
                         progressBar.visibility = View.GONE
                     }
                 }
+                binding?.newComment?.setText("")
             }
 
             backButton.setOnClickListener {

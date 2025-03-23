@@ -37,16 +37,19 @@ class Model private constructor() {
 
     private val firebaseModel = FirebaseModel()
 //    private val cloudinaryModel = CloudinaryModel() // TODO implement cloudinary
+
     companion object {
         val shared = Model()
     }
-
 
     fun refreshAllPosts() {
         loadingState.postValue(LoadingState.LOADING)
         val lastUpdated: Long = Post.lastUpdated
         firebaseModel.getAllPosts(lastUpdated) { posts ->
             executor.execute {
+                // Clear table
+                database.postDao().clearPostsTable()
+
                 var currentTime = lastUpdated
                 for (post in posts) {
                     Log.d("TAG", post.toString())
@@ -65,11 +68,16 @@ class Model private constructor() {
     }
 
     fun refreshComments(postId: String) {
+
+        Log.d("TAG_refreshComments", "post: " + postId)
         firebaseModel.getPostById(postId) { post ->
             executor.execute {
+                // Clear table
+                database.commentsDao().clearComnmentsTable()
+
                 Log.d("TAG_post", "post: " + post.toString())
                 Log.d("TAG_post_comments", "comments: " + post?.comments.toString())
-                if (post?.comments == null) {
+                if (post?.comments == null || post.comments.isEmpty()) {
                     return@execute
                 }
                 val commentsList = post.comments as List<*>

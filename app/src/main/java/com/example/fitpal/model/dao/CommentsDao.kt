@@ -12,6 +12,9 @@ import com.example.fitpal.Comment
 @Dao
 interface CommentsDao  {
 
+    @Query("DELETE FROM Comment")
+    fun clearComnmentsTable()
+
     @Query("SELECT * FROM Comment")
     fun getAllComments(): LiveData<List<Comment>>
 

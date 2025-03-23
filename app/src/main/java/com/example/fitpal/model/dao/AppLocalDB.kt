@@ -10,7 +10,7 @@ import com.example.fitpal.model.Post
 import com.example.fitpal.utils.extensions.Converters
 
 @TypeConverters(Converters::class)  // Convert nested types to json and the opposite
-@Database(entities = [Post::class, Comment::class], version = 4)
+@Database(entities = [Post::class, Comment::class], version = 5)
 abstract class AppLocalDbRepository : RoomDatabase() {
     abstract fun postDao(): PostDao
     abstract fun commentsDao(): CommentsDao

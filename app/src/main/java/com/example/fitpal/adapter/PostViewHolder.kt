@@ -40,17 +40,19 @@ class PostViewHolder(
 
         val likesCount = post?.likes?.size ?: 0
         val commentCount = post?.comments?.size ?: 0
+        val author = "author" //TODO relace with the current user
 
-        isLiked = (post?.likes?.size ?: 0) > 0
+        Log.d("TAG_likes", post?.likes.toString())
+        Log.d("TAG_likes_contains_author", post?.likes?.contains(author).toString())
+        isLiked = post?.likes?.contains(author) == true
+        Log.d("TAG_likes_isLiked", isLiked.toString())
 
         binding.likesBadge.text = likesCount.toString()
         binding.commentsBadge.text = commentCount.toString()
 
         binding.btnLike.setOnClickListener {
             isLiked = !isLiked
-            val author = "author"
             post?.let {
-//                it.likes = if (isLiked) it.likes + 1 else it.likes - 1
                 it.likes = if (isLiked) it.likes + author else it.likes - author
                 Model.shared.like(it.id, author, callback = {})
                 updateLikesDisplay()
@@ -60,23 +62,14 @@ class PostViewHolder(
 
     }
 
-
-
     private fun updateLikesDisplay() {
         val likesCount = post?.likes?.size ?: 0
-
-        if (likesCount > 0) {
-            binding.likesBadge.visibility = View.VISIBLE
-            binding.likesBadge.text = likesCount.toString()
-        } else {
-            binding.likesBadge.visibility = View.GONE
-        }
-
+        binding.likesBadge.visibility = View.VISIBLE
+        binding.likesBadge.text = likesCount.toString()
         binding.btnLike.setImageResource(
             if (isLiked) R.drawable.ic_like else R.drawable.ic_like_outlined
         )
     }
-
 
     private fun animateLikeButton() {
         val scaleAnimation = ScaleAnimation(

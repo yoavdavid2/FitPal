@@ -12,6 +12,9 @@ import com.example.fitpal.model.Post
 @Dao
 interface PostDao  {
 
+    @Query("DELETE FROM Post")
+    fun clearPostsTable()
+
     @Query("SELECT * FROM Post")
     fun getAllPosts(): LiveData<List<Post>>
 

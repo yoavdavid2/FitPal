@@ -29,12 +29,16 @@ class FeedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentFeedBinding.inflate(inflater, container, false)
-        getAllPosts()
 
         val recyclerView: RecyclerView? = binding?.recyclerView
         recyclerView?.setHasFixedSize(true)
+
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView?.layoutManager = layoutManager
+
+        adapter =  PostsRecyclerAdapter(viewModel.posts.value)
+        recyclerView?.adapter = adapter
 
         viewModel.posts.observe(viewLifecycleOwner) {
             adapter?.posts = it
@@ -50,12 +54,6 @@ class FeedFragment : Fragment() {
         Model.shared.loadingState.observe(viewLifecycleOwner) { state ->
             binding?.swipeToRefresh?.isRefreshing = state == Model.LoadingState.LOADING
         }
-
-        val layoutManager = LinearLayoutManager(context)
-        recyclerView?.layoutManager = layoutManager
-
-        adapter =  PostsRecyclerAdapter(viewModel.posts.value)
-        recyclerView?.adapter = adapter
 
         adapter?.listener = object : OnItemClickListener {
             override fun onItemClick(position: Int) {
@@ -80,6 +78,7 @@ class FeedFragment : Fragment() {
             val action = FeedFragmentDirections.actionFeedFragmentToAddPostFragment()
             findNavController().navigate(action)
         }
+        getAllPosts()
 
         return binding?.root
     }
