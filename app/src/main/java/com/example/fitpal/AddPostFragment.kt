@@ -44,8 +44,6 @@ class AddPostFragment : Fragment() {
     }
 
     private fun onSaveClicked(view: View) {
-        Log.d("TAG", "SaveButton clicked!")
-
         val uuid: String = UUID.randomUUID().toString()
         val author: String = "**************temp-author**************" //TODO get user Email
         val title: String = binding?.titleTextView?.text?.toString() ?: ""

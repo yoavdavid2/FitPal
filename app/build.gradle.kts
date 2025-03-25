@@ -20,6 +20,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField("String", "CLOUD_NAME", "\"${project.properties["CLOUD_NAME"] ?: ""}\"")
         buildConfigField("String", "PLACES_API_URL", "\"${project.properties["PLACES_API_URL"] ?: ""}\"")
         buildConfigField("String", "MAPS_API_URL", "\"${project.properties["MAPS_API_URL"] ?: ""}\"")
         buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${project.properties["GOOGLE_MAPS_API_KEY"] ?: ""}\"")
@@ -94,4 +95,8 @@ dependencies {
     // Declare the dependency for the Cloud Firestore library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation(libs.google.firebase.firestore)
+
+    // Cloudinary
+    implementation(libs.cloudinary.android)
+
 }

@@ -26,6 +26,7 @@ class Model private constructor() {
 
     private val database: AppLocalDbRepository = AppLocalDB.database
     private var executor = Executors.newSingleThreadExecutor()
+    private val cloudinaryModel = CloudinaryModel()
 
     val posts: LiveData<List<Post>>
         get() = database.postDao().getAllPosts()
@@ -129,25 +130,23 @@ class Model private constructor() {
     fun add(post: Post, image: Bitmap?, storage: Storage, callback: EmptyCallback) {
         firebaseModel.add(
             post,
-            callback = callback
-        ) 
-//        firebaseModel.add(post) {
-//            image?.let {
-//                uploadTo(
-//                    storage,
-//                    image = image,
-//                    name = student.id,
-//                    callback = { uri ->
-//                        if (!uri.isNullOrBlank()) {
-//                            val st = student.copy(avatarUrl = uri)
-//                            firebaseModel.add(st, callback)
-//                        } else {
-//                            callback()
-//                        }
-//                    },
-//                )
-//            } ?: callback()
-//        }
+        ) {
+            image?.let {
+                uploadTo(
+                    storage,
+                    image = image,
+                    name = post.id,
+                    callback = { uri ->
+                        if (!uri.isNullOrBlank()) {
+                            val st = post.copy(image = uri)
+                            firebaseModel.add(st, callback)
+                        } else {
+                            callback()
+                        }
+                    },
+                )
+            } ?: callback()
+        }
     }
 
     fun getPostById(postId: String, callback: (Post?) -> Unit) {
@@ -166,42 +165,42 @@ class Model private constructor() {
         firebaseModel.delete(post, callback)
     }
 
-//    private fun uploadTo(storage: Storage, image: Bitmap, name: String, callback: (String?) -> Unit) {
-//        when (storage) {
-//            Storage.FIREBASE -> {
-//                uploadImageToFirebase(image, name, callback)
-//            }
-//            Storage.CLOUDINARY -> {
-//                uploadImageToCloudinary(
-//                    bitmap = image,
-//                    name = name,
-//                    onSuccess = callback,
-//                    onError = { callback(null) }
-//                )
-//            }
-//        }
-//    }
+    private fun uploadTo(storage: Storage, image: Bitmap, name: String, callback: (String?) -> Unit) {
+        when (storage) {
+            Storage.FIREBASE -> {
+                uploadImageToFirebase(image, name, callback)
+            }
+            Storage.CLOUDINARY -> {
+                uploadImageToCloudinary(
+                    bitmap = image,
+                    name = name,
+                    onSuccess = callback,
+                    onError = { callback(null) }
+                )
+            }
+        }
+    }
 
+    private fun uploadImageToFirebase(
+        image: Bitmap,
+        name: String,
+        callback: (String?) -> Unit
+    ) {
+        firebaseModel.uploadImage(image, name, callback)
+    }
 
-//    private fun uploadImageToFirebase(
-//        image: Bitmap,
-//        name: String,
-//        callback: (String?) -> Unit
-//    ) {
-//        firebaseModel.uploadImage(image, name, callback)
-//    }
-//
-//    private fun uploadImageToCloudinary(
-//        bitmap: Bitmap,
-//        name: String,
-//        onSuccess: (String?) -> Unit,
-//        onError: (String?) -> Unit
-//    ) {
-//        cloudinaryModel.uploadImage(
-//            bitmap = bitmap,
-//            name = name,
-//            onSuccess = onSuccess,
-//            onError = onError
-//        )
-//    }
+    private fun uploadImageToCloudinary(
+        bitmap: Bitmap,
+        name: String,
+        onSuccess: (String?) -> Unit,
+        onError: (String?) -> Unit
+    ) {
+        Log.d("TAG_uploadImageToCloudinary", name)
+        cloudinaryModel.uploadImage(
+            bitmap = bitmap,
+            name = name,
+            onSuccess = onSuccess,
+            onError = onError
+        )
+    }
 }

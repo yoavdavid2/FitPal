@@ -3,13 +3,14 @@ package com.example.fitpal.adapter
 import android.util.Log
 import android.view.View
 import android.view.animation.ScaleAnimation
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fitpal.OnItemClickListener
 import com.example.fitpal.R
 import com.example.fitpal.databinding.PostListRowBinding
 import com.example.fitpal.model.Model
 import com.example.fitpal.model.Post
+import com.squareup.picasso.Picasso
+import kotlin.text.isNotBlank
 
 class PostViewHolder(
     private val binding: PostListRowBinding,
@@ -37,18 +38,27 @@ class PostViewHolder(
         binding.postTitle.text = post?.title
         binding.postText.text = post?.text
         binding.postDate.text = post?.uploadDate
+        this.post?.image?.let {
+            if (it.isNotBlank()) {
+                Picasso.get()
+                    .load(it)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(binding.postImage)
+            }
+        }
 
         val likesCount = post?.likes?.size ?: 0
         val commentCount = post?.comments?.size ?: 0
         val author = "author" //TODO relace with the current user
 
-        Log.d("TAG_likes", post?.likes.toString())
-        Log.d("TAG_likes_contains_author", post?.likes?.contains(author).toString())
         isLiked = post?.likes?.contains(author) == true
-        Log.d("TAG_likes_isLiked", isLiked.toString())
 
         binding.likesBadge.text = likesCount.toString()
         binding.commentsBadge.text = commentCount.toString()
+
+        binding.btnLike.setImageResource(
+            if (isLiked) R.drawable.ic_like else R.drawable.ic_like_outlined
+        )
 
         binding.btnLike.setOnClickListener {
             isLiked = !isLiked
@@ -59,7 +69,6 @@ class PostViewHolder(
                 animateLikeButton()
             }
         }
-
     }
 
     private fun updateLikesDisplay() {

@@ -1,7 +1,6 @@
 package com.example.fitpal
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,7 +78,9 @@ class PostCommentsFragment : Fragment() {
                 val c = Comment(uuid, CONST_AUTHOR, newComment)
                 Model.shared.addComment(postId!!, c) { success ->
                     if (success) {
-                        viewModel.refreshComments(postId!!)
+                        viewModel.refreshComments(postId!!) {
+
+                        }
                     } else {
                         progressBar.visibility = View.GONE
                     }
@@ -106,7 +107,9 @@ class PostCommentsFragment : Fragment() {
 
     private fun getCommentsOnPosts(postId: String) {
         binding?.progressBar?.visibility = View.VISIBLE
-        viewModel.refreshComments(postId)
+        viewModel.refreshComments(postId) {
+            binding?.progressBar?.visibility = View.GONE
+        }
     }
 
     companion object {

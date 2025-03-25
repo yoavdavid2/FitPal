@@ -12,6 +12,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.memoryCacheSettings
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.io.ByteArrayOutputStream
 
 
 class FirebaseModel {
@@ -37,10 +38,8 @@ class FirebaseModel {
                     true -> {
                         val posts: MutableList<Post> = mutableListOf()
                         for (json in it.result) {
-                            Log.d("TAG_POSTS_JSON", json.toString())
                             posts.add(Post.fromJSON(json.data))
                         }
-                        Log.d("TAG", "number of posts: " + posts.size.toString())
                         callback(posts)
                     }
 
@@ -97,6 +96,7 @@ class FirebaseModel {
                 Log.w("TAG", "Error fetching post", e)
             }
     }
+
     fun addComment(postId: String, newComment: Comment, callback: (Boolean) -> Unit) {
         val postsCollection = database.collection(Constants.Collections.POSTS)
 
@@ -152,24 +152,24 @@ class FirebaseModel {
             }
     }
 
-    fun delete(student: Post, callback: EmptyCallback) {
+    fun delete(post: Post, callback: EmptyCallback) {
 
     }
 
-//    fun uploadImage(image: Bitmap, name: String, callback: (String?) -> Unit) {
-//        val storageRef = storage.reference
-//        val imageRef = storageRef.child("images/$name.jpg")
-//        val baos = ByteArrayOutputStream()
-//        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-//        val data = baos.toByteArray()
-//
-//        var uploadTask = imageRef.putBytes(data)
-//        uploadTask.addOnFailureListener {
-//            callback(null)
-//        }.addOnSuccessListener { taskSnapshot ->
-//            imageRef.downloadUrl.addOnSuccessListener { uri ->
-//                callback(uri.toString())
-//            }
-//        }
-//    }
+    fun uploadImage(image: Bitmap, name: String, callback: (String?) -> Unit) {
+        val storageRef = storage.reference
+        val imageRef = storageRef.child("images/$name.jpg")
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+
+        var uploadTask = imageRef.putBytes(data)
+        uploadTask.addOnFailureListener {
+            callback(null)
+        }.addOnSuccessListener { taskSnapshot ->
+            imageRef.downloadUrl.addOnSuccessListener { uri ->
+                callback(uri.toString())
+            }
+        }
+    }
 }
