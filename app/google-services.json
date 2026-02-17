@@ -12,7 +12,28 @@
           "package_name": "com.example.fitpal"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "656865816608-q4m00ejgdllbgn9o06kke5ocpcmuqath.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitpal",
+            "certificate_hash": "b408b6cebf2a916bfd96c1f3f38cce0018769f40"
+          }
+        },
+        {
+          "client_id": "656865816608-surv0iuuev9s868rr2m8t75knrhe9ar4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitpal",
+            "certificate_hash": "0fae375a05dfc6e2090fbfc45a3e30e83e8453d3"
+          }
+        },
+        {
+          "client_id": "656865816608-lqdlcbph6jp7c6tvc1g0gnbtm1oq8g5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCyXUocKNCKHCnPdzvOQi2nckByQ7IHGx0"
@@ -20,7 +41,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "656865816608-lqdlcbph6jp7c6tvc1g0gnbtm1oq8g5d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
