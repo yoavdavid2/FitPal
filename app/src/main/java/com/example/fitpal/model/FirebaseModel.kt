@@ -6,6 +6,7 @@ import com.example.fitpal.Comment
 import com.example.fitpal.base.Constants
 import com.example.fitpal.base.EmptyCallback
 import com.example.fitpal.base.PostsCallback
+import com.example.fitpal.utils.extensions.toFirebaseTimestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestoreSettings
 import com.google.firebase.firestore.memoryCacheSettings

@@ -37,6 +37,8 @@ class Model private constructor() {
     val chats: LiveData<List<Chat>>
         get() = database.chatDao().getAllChats()
 
+    val chats: LiveData<List<Chat>>
+        get() = database.chatDao().getAllChats()
     val loadingState: MutableLiveData<LoadingState> = MutableLiveData<LoadingState>()
 
     private val firebaseModel = FirebaseModel()
