@@ -6,14 +6,22 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.fitpal.Comment
 import com.example.fitpal.base.MyApplication
+import com.example.fitpal.model.Chat
 import com.example.fitpal.model.Post
-import com.example.fitpal.utils.extensions.Converters
+import com.example.fitpal.model.fitness.entities.Article
+import com.example.fitpal.model.fitness.entities.Tip
+import com.example.fitpal.model.fitness.entities.WorkoutPlan
+import com.example.fitpal.utils.Converters
 
-@TypeConverters(Converters::class)  // Convert nested types to json and the opposite
-@Database(entities = [Post::class, Comment::class], version = 5)
+@TypeConverters(Converters::class)
+@Database(entities = [Post::class, Comment::class, Tip::class, Article::class, WorkoutPlan::class, Chat::class], version = 5)
 abstract class AppLocalDbRepository : RoomDatabase() {
     abstract fun postDao(): PostDao
     abstract fun commentsDao(): CommentsDao
+    abstract fun tipDao(): TipDao
+    abstract fun articleDao(): ArticleDao
+    abstract fun workoutPlanDao(): WorkoutPlanDao
+    abstract fun chatDao(): ChatDao
 }
 
 object AppLocalDB {

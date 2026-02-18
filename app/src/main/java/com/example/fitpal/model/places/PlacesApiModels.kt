@@ -8,6 +8,11 @@ data class PlacesApiRequest(
     val languageCode: String
 )
 
+data class PlacesApiResponse(
+    @SerializedName("places")
+    val places: List<Place>? = null
+)
+
 data class LocationRestriction(
     val circle: Circle
 )
@@ -20,19 +25,6 @@ data class Circle(
 data class LatLng(
     val latitude: Double,
     val longitude: Double
-)
-
-data class PlacesApiResponse(
-    @SerializedName("places")
-    val places: List<Place>? = null
-)
-
-data class Place(
-    val displayName: DisplayName,
-    val formattedAddress: String?,
-    val location: LatLng,
-    val types: List<String>?,
-    val rating: Float?
 )
 
 data class DisplayName(

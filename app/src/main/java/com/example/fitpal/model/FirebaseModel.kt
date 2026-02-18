@@ -6,13 +6,13 @@ import com.example.fitpal.Comment
 import com.example.fitpal.base.Constants
 import com.example.fitpal.base.EmptyCallback
 import com.example.fitpal.base.PostsCallback
-import com.example.fitpal.utils.extensions.toFirebaseTimestamp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestoreSettings
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.memoryCacheSettings
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.storage
 
 
 class FirebaseModel {
@@ -21,7 +21,6 @@ class FirebaseModel {
     private val storage = Firebase.storage
 
     init {
-
         val settings = firestoreSettings {
             setLocalCacheSettings(memoryCacheSettings {  })
         }
@@ -156,6 +155,112 @@ class FirebaseModel {
 
     }
 
+//    fun uploadImage(image: Bitmap, name: String, callback: (String?) -> Unit) {
+//        val storageRef = storage.reference
+//        val imageRef = storageRef.child("images/$name.jpg")
+//        val baos = ByteArrayOutputStream()
+//        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+//        val data = baos.toByteArray()
+//
+//        var uploadTask = imageRef.putBytes(data)
+//        uploadTask.addOnFailureListener {
+//            callback(null)
+//        }.addOnSuccessListener { taskSnapshot ->
+//            imageRef.downloadUrl.addOnSuccessListener { uri ->
+//                callback(uri.toString())
+//            }
+//        }
+//    }
+
+
+    fun getUserInboxMessages(activeUserEmail: String, callback: (MutableList<Chat>) -> Unit) {
+        database.collection("chats").whereArrayContains("chatUsers", activeUserEmail).get()
+            .addOnSuccessListener { querySnapshot ->
+                val currentUserChats: MutableList<Chat> = mutableListOf()
+
+                for (document in querySnapshot) {
+                    val documentData = document.data
+
+                    val chatUsers = documentData["chatUsers"] as? List<String>
+
+                    val messages = documentData["messages"] as? List<HashMap<String, Any>>
+                    val parsedMessaged = convertHashMapListToMessages(messages)
+
+                    val lastUpdated = documentData["lastUpdated"] as? Long
+                    val id = document.id
+
+                    chatUsers?.let {
+                        if (messages != null) {
+                            val chat = Chat(
+                                chatUsers = it,
+                                messages = parsedMessaged,
+                                lastUpdated = lastUpdated,
+                                id = id
+                            )
+
+                            currentUserChats.add(chat)
+                        }
+                    }
+
+                }
+
+                callback(currentUserChats)
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting user chats", exception) // Include exception in log
+            }
+    }
+
+    fun addChat(newChat: Chat ,callback: (Boolean) -> Unit) {
+        database.collection("chats").document().set(newChat).addOnCompleteListener { callback(true) }
+            .addOnFailureListener{ Log.d(TAG,it.toString() + it.message)
+                callback(false)}
+
+    }
+
+
+    fun getChatMessages(chatId: String, callback: (MutableList<Message>) -> Unit) {
+        val chatDocRef = database.collection("chats").document(chatId)
+
+        chatDocRef.get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val messages = documentSnapshot["messages"] as? List<HashMap<String, Any>>
+                    val parsedMessaged = convertHashMapListToMessages(messages)
+
+                    callback(parsedMessaged.toMutableList())
+                } else {
+                    callback(mutableListOf())
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "error getting chat message")
+                callback(mutableListOf())
+            }
+    }
+
+
+    fun addNewMessage(newMessage: Message, chatId: String ,callback: (Boolean) -> Unit) {
+        val messageMap = mapOf(
+            "id" to newMessage.id,
+            "messageText" to newMessage.messageText,
+            "senderId" to newMessage.senderId,
+            "timestamp" to newMessage.timestamp
+        )
+
+        database.collection("chats").document(chatId)
+            .update("messages", FieldValue.arrayUnion(messageMap))
+            .addOnSuccessListener {
+                callback(true)
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error adding message", exception)
+                callback(false)
+            }
+    }
+    companion object {
+        private const val TAG = "firebaseModel"
+    }
     fun uploadImage(image: Bitmap, name: String, callback: (String?) -> Unit) {
         val storageRef = storage.reference
         val imageRef = storageRef.child("images/$name.jpg")

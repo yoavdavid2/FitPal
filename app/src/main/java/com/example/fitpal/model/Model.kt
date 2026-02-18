@@ -34,6 +34,9 @@ class Model private constructor() {
     val comments: LiveData<List<Comment>>
         get() = database.commentsDao().getAllComments()
 
+    val chats: LiveData<List<Chat>>
+        get() = database.chatDao().getAllChats()
+
     val loadingState: MutableLiveData<LoadingState> = MutableLiveData<LoadingState>()
 
     private val firebaseModel = FirebaseModel()
@@ -125,6 +128,25 @@ class Model private constructor() {
 //                }
             }
         }
+    }
+
+    fun refreshAllChats(currentUserEmail: String) {
+        loadingState.postValue(LoadingState.LOADING)
+        val lastUpdated: Long = Chat.lastUpdated
+        firebaseModel.getUserInboxMessages(currentUserEmail) { chats ->
+            executor.execute {
+                database.chatDao().insertChats(chats)
+            }
+        }
+        loadingState.postValue(LoadingState.LOADED)
+    }
+
+    fun addChat(chat: Chat, callback: EmptyCallback) {
+        firebaseModel.addChat(chat) {callback()}
+    }
+
+    fun addChatMessage(message: Message, chatId: String, callback: EmptyCallback) {
+        firebaseModel.addNewMessage(message, chatId) {callback()}
     }
 
     fun add(post: Post, image: Bitmap?, storage: Storage, callback: EmptyCallback) {
