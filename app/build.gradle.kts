@@ -71,9 +71,14 @@ dependencies {
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
-    implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.storage)
+
+    implementation(libs.firebase.auth.ktx)
+
     implementation(libs.play.services.auth)
+
+    debugImplementation("com.google.firebase:firebase-appcheck-debug")
+    implementation("com.google.firebase:firebase-appcheck")
 
     // Maps
     implementation(libs.android.sdk)

@@ -12,15 +12,92 @@
           "package_name": "com.example.fitpal"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "656865816608-lrfd702eaoam700uaaqkus5u3s8qfs7j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitpal",
+            "certificate_hash": "022b2c747c589caeffd9e56768de22f994d18d71"
+          }
+        },
+        {
+          "client_id": "656865816608-q4m00ejgdllbgn9o06kke5ocpcmuqath.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitpal",
+            "certificate_hash": "b408b6cebf2a916bfd96c1f3f38cce0018769f40"
+          }
+        },
+        {
+          "client_id": "656865816608-surv0iuuev9s868rr2m8t75knrhe9ar4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitpal",
+            "certificate_hash": "0fae375a05dfc6e2090fbfc45a3e30e83e8453d3"
+          }
+        },
+        {
+          "client_id": "656865816608-utq841v8b56qelnksel76nobioau55jq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitpal",
+            "certificate_hash": "2f7782c49190733857bbe478a19f312f29e598e2"
+          }
+        },
+        {
+          "client_id": "656865816608-lqdlcbph6jp7c6tvc1g0gnbtm1oq8g5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCyXUocKNCKHCnPdzvOQi2nckByQ7IHGx0"
+        },
+        {
+          "current_key": "AIzaSyDmPHd3JExR5KSvh7wvC8cWZ2IfdxyBExU"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "656865816608-lqdlcbph6jp7c6tvc1g0gnbtm1oq8g5d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656865816608:android:1dde51ec154c0a20a18c45",
+        "android_client_info": {
+          "package_name": "com.example.fitpal2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "656865816608-lqdlcbph6jp7c6tvc1g0gnbtm1oq8g5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyXUocKNCKHCnPdzvOQi2nckByQ7IHGx0"
+        },
+        {
+          "current_key": "AIzaSyDmPHd3JExR5KSvh7wvC8cWZ2IfdxyBExU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "656865816608-lqdlcbph6jp7c6tvc1g0gnbtm1oq8g5d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -8,10 +8,10 @@ import com.example.fitpal.base.PostsCallback
 import com.example.fitpal.utils.extensions.toFirebaseTimestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestoreSettings
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.memoryCacheSettings
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.storage
 
 
 class FirebaseModel {
