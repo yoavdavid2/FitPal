@@ -76,7 +76,12 @@ class GeminiService private constructor() {
                 Keep tips short (1-2 sentences), articles medium length (2-3 paragraphs), and workout plans should be detailed enough to follow.
                 For each article, find an image that is related and add it's url so it can be presented alongside the article itself.
                 
-                Important: DO NOT include ANY explanatory text before or after the JSON. Your entire response must be ONLY the JSON object
+                Important: 
+                1. Return ONLY the raw JSON. 
+                2. Do NOT include markdown formatting. 
+                3. Do NOT include the word 'json' or any backticks (```).
+                4. Start the response with '{' and end it with '}'.
+                5. DO NOT include ANY explanatory text before or after the JSON. Your entire response must be ONLY the JSON object
             """.trimIndent()
 
             Log.d("GeminiService", "Creating request with prompt: ${prompt.take(100)}...")
@@ -86,7 +91,7 @@ class GeminiService private constructor() {
                     temperature = 0.7f,
                     topK = 40,
                     topP = 0.95f,
-                    maxOutputTokens = 1024
+                    maxOutputTokens = 4096
                 )
             )
 

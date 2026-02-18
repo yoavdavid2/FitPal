@@ -34,6 +34,6 @@ data class Candidate(
 )
 
 interface GeminiApi {
-    @POST("v1/models/gemini-1.5-pro:generateContent")
+    @POST("v1/models/gemini-2.5-flash:generateContent")
     fun generateContent(@Body request: GeminiRequest): Call<GeminiResponse>
 }
