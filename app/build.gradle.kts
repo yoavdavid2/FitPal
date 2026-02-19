@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.fitpal"
+    namespace = "com.example.fitpal3"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.fitpal"
+        applicationId = "com.example.fitpal3"
         minSdk = 29
         targetSdk = 34
         versionCode = 1

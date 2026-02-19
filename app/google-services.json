@@ -1,68 +1,33 @@
 {
   "project_info": {
-    "project_number": "656865816608",
-    "project_id": "fitpal-47052",
-    "storage_bucket": "fitpal-47052.firebasestorage.app"
+    "project_number": "553163883025",
+    "project_id": "fitpal-d1af8",
+    "storage_bucket": "fitpal-d1af8.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:656865816608:android:f3c4e8ef3df30b79a18c45",
+        "mobilesdk_app_id": "1:553163883025:android:6b9f424e18dfc946c9a7b0",
         "android_client_info": {
-          "package_name": "com.example.fitpal"
+          "package_name": "com.example.fitpal3"
         }
       },
       "oauth_client": [
         {
-          "client_id": "656865816608-lrfd702eaoam700uaaqkus5u3s8qfs7j.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.fitpal",
-            "certificate_hash": "022b2c747c589caeffd9e56768de22f994d18d71"
-          }
-        },
-        {
-          "client_id": "656865816608-q4m00ejgdllbgn9o06kke5ocpcmuqath.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.fitpal",
-            "certificate_hash": "b408b6cebf2a916bfd96c1f3f38cce0018769f40"
-          }
-        },
-        {
-          "client_id": "656865816608-surv0iuuev9s868rr2m8t75knrhe9ar4.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.fitpal",
-            "certificate_hash": "0fae375a05dfc6e2090fbfc45a3e30e83e8453d3"
-          }
-        },
-        {
-          "client_id": "656865816608-utq841v8b56qelnksel76nobioau55jq.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.fitpal",
-            "certificate_hash": "2f7782c49190733857bbe478a19f312f29e598e2"
-          }
-        },
-        {
-          "client_id": "656865816608-lqdlcbph6jp7c6tvc1g0gnbtm1oq8g5d.apps.googleusercontent.com",
+          "client_id": "553163883025-5sjrshuiu97c64p1qp8e1fr78p5859i7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCyXUocKNCKHCnPdzvOQi2nckByQ7IHGx0"
-        },
-        {
-          "current_key": "AIzaSyDmPHd3JExR5KSvh7wvC8cWZ2IfdxyBExU"
+          "current_key": "AIzaSyDVnSKKuH0iGBxhXfYr9_2u16D4zG4sp5U"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "656865816608-lqdlcbph6jp7c6tvc1g0gnbtm1oq8g5d.apps.googleusercontent.com",
+              "client_id": "553163883025-5sjrshuiu97c64p1qp8e1fr78p5859i7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -71,30 +36,67 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:656865816608:android:1dde51ec154c0a20a18c45",
+        "mobilesdk_app_id": "1:553163883025:android:7ca303dee007ee32c9a7b0",
         "android_client_info": {
-          "package_name": "com.example.fitpal2"
+          "package_name": "com.example.fitpal3"
         }
       },
       "oauth_client": [
         {
-          "client_id": "656865816608-lqdlcbph6jp7c6tvc1g0gnbtm1oq8g5d.apps.googleusercontent.com",
+          "client_id": "553163883025-anqk6agng2ts325sq1as1q97jtt9o07i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitpal3",
+            "certificate_hash": "0fae375a05dfc6e2090fbfc45a3e30e83e8453d3"
+          }
+        },
+        {
+          "client_id": "553163883025-h6430vvnv3pl4inmfj8lr7negu0isp76.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitpal3",
+            "certificate_hash": "b408b6cebf2a916bfd96c1f3f38cce0018769f40"
+          }
+        },
+        {
+          "client_id": "553163883025-hu5or05v662g7a28u1pcvppirrpg88th.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitpal3",
+            "certificate_hash": "18ef36a2ca6d475d69ce01b45f77d384eefe8b07"
+          }
+        },
+        {
+          "client_id": "553163883025-ikfo3g7p4b31krg95rdrq7ljauqn3aq8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitpal3",
+            "certificate_hash": "022b2c747c589caeffd9e56768de22f994d18d71"
+          }
+        },
+        {
+          "client_id": "553163883025-j8fj58cs8h6tppo4k6l0fv3bae6q594k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitpal3",
+            "certificate_hash": "2f7782c49190733857bbe478a19f312f29e598e2"
+          }
+        },
+        {
+          "client_id": "553163883025-5sjrshuiu97c64p1qp8e1fr78p5859i7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCyXUocKNCKHCnPdzvOQi2nckByQ7IHGx0"
-        },
-        {
-          "current_key": "AIzaSyDmPHd3JExR5KSvh7wvC8cWZ2IfdxyBExU"
+          "current_key": "AIzaSyDVnSKKuH0iGBxhXfYr9_2u16D4zG4sp5U"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "656865816608-lqdlcbph6jp7c6tvc1g0gnbtm1oq8g5d.apps.googleusercontent.com",
+              "client_id": "553163883025-5sjrshuiu97c64p1qp8e1fr78p5859i7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

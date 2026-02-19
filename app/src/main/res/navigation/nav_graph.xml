@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.example.fitpal.ChatFragment"
+        android:name="com.example.fitpal3.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat">
         <argument
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/messagesFragment"
-        android:name="com.example.fitpal.MessagesFragment"
+        android:name="com.example.fitpal3.MessagesFragment"
         android:label="Messages"
         tools:layout="@layout/fragment_messages">
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/feedFragment"
-        android:name="com.example.fitpal.FeedFragment"
+        android:name="com.example.fitpal3.FeedFragment"
         android:label="Feed"
         tools:layout="@layout/fragment_feed" >
         <action
@@ -47,12 +47,12 @@
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.example.fitpal.MapFragment"
+        android:name="com.example.fitpal3.MapFragment"
         android:label="Map"
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/tipsFragment"
-        android:name="com.example.fitpal.TipsFragment"
+        android:name="com.example.fitpal3.TipsFragment"
         android:label="Tips"
         tools:layout="@layout/fragment_tips" >
         <action
@@ -72,7 +72,7 @@
     </fragment>
     <fragment
         android:id="@+id/articleDetailsFragment"
-        android:name="com.example.fitpal.ArticleDetailsFragment"
+        android:name="com.example.fitpal3.ArticleDetailsFragment"
         android:label="Article details"
         tools:layout="@layout/fragment_article_detail">
         <argument
@@ -82,7 +82,7 @@
 
     <fragment
         android:id="@+id/workoutDetailsFragment"
-        android:name="com.example.fitpal.WorkoutDetailsFragment"
+        android:name="com.example.fitpal3.WorkoutDetailsFragment"
         android:label="Workout Plan details"
         tools:layout="@layout/fragment_workout_details">
         <argument
@@ -91,7 +91,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.fitpal.LoginFragment"
+        android:name="com.example.fitpal3.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -104,7 +104,7 @@
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
-        android:name="com.example.fitpal.SignupFragment"
+        android:name="com.example.fitpal3.SignupFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" >
         <action
@@ -113,7 +113,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.fitpal.ProfileFragment"
+        android:name="com.example.fitpal3.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -123,7 +123,7 @@
     </fragment>
     <fragment
         android:id="@+id/postCommentsFragment"
-        android:name="com.example.fitpal.PostCommentsFragment"
+        android:name="com.example.fitpal3.PostCommentsFragment"
         android:label="fragment_post_comments"
         tools:layout="@layout/fragment_post_comments" >
         <argument
@@ -132,7 +132,7 @@
     </fragment>
     <fragment
         android:id="@+id/addPostFragment"
-        android:name="com.example.fitpal.AddPostFragment"
+        android:name="com.example.fitpal3.AddPostFragment"
         android:label="Add Post"
         tools:layout="@layout/fragment_add_post" />
 
