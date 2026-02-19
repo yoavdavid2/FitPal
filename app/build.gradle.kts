@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.fitpal"
+    namespace = "com.example.fitpal3"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.fitpal"
+        applicationId = "com.example.fitpal3"
         minSdk = 29
         targetSdk = 34
         versionCode = 1
@@ -20,8 +20,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField("String", "CLOUD_NAME", "\"${project.properties["CLOUD_NAME"] ?: ""}\"")
         buildConfigField("String", "PLACES_API_URL", "\"${project.properties["PLACES_API_URL"] ?: ""}\"")
         buildConfigField("String", "MAPS_API_URL", "\"${project.properties["MAPS_API_URL"] ?: ""}\"")
+        buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${project.properties["GOOGLE_MAPS_API_KEY"] ?: ""}\"")
         buildConfigField("String", "GEMINI_API_URL", "\"${project.properties["GEMINI_API_URL"] ?: ""}\"")
     }
 
@@ -101,4 +103,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    // Cloudinary
+    implementation(libs.cloudinary.android)
+
 }

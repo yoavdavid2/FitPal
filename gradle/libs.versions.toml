@@ -1,5 +1,6 @@
 [versions]
 activity = "1.10.1"
+cloudinaryAndroid = "3.0.2"
 agp = "8.8.0"
 kotlin = "2.1.0"
 googleServices = "4.4.2"
@@ -69,6 +70,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRunt
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+cloudinary-android = { module = "com.cloudinary:cloudinary-android", version.ref = "cloudinaryAndroid" }
 generativeai = { module = "com.google.ai.client.generativeai:generativeai", version.ref = "generativeai" }
 google-firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
 google-services = { module = "com.google.gms:google-services", version.ref = "googleServicesVersion" }
