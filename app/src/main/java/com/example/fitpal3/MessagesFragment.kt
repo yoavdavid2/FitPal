@@ -64,15 +64,16 @@ class MessagesFragment : Fragment() {
 
         binding?.addUserToInboxButton?.setOnClickListener {
             val email = binding?.addedUsernameChatTextField?.editText?.text?.toString()?.trim()
-
             val myUser = firebaseAuth.currentUser?.email
 
             if (!email.isNullOrEmpty() && !myUser.isNullOrEmpty()) {
+                val chatId = listOf(myUser, email).sorted().joinToString("__")
+
                 val newChat = Chat(
+                    id = chatId,
                     chatUsers = listOf(myUser, email),
-                    messages = listOf(),
-                    lastUpdated = System.currentTimeMillis(),
-                    id = "temp"
+                    messages = emptyList(),
+                    lastUpdated = System.currentTimeMillis()
                 )
 
                 binding?.addChatSection?.visibility = View.GONE
@@ -80,8 +81,8 @@ class MessagesFragment : Fragment() {
                 firebaseModel.addChat(newChat) { success ->
                     if (success) {
                         hideKeyboard(binding?.textInput)
-                        viewModel.addChat(newChat)
-                        firebaseAuth.currentUser?.email?.let { it1 -> viewModel.updateChats(it1) }
+
+                        viewModel.updateChats(myUser)
                     } else {
                         Toast.makeText(requireContext(), "Failed to add chat", Toast.LENGTH_SHORT).show()
                     }

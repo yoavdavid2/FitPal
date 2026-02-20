@@ -38,12 +38,18 @@ class PostViewHolder(
         binding.postTitle.text = post?.title
         binding.postText.text = post?.text
         binding.postDate.text = post?.uploadDate
+
+        Picasso.get().cancelRequest(binding.postImage)
+        binding.postImage.setImageDrawable(null)
+
         this.post?.image?.let {
-            if (it.isNotBlank()) {
+            if (it.isNotBlank() || it != "") {
                 Picasso.get()
                     .load(it)
                     .placeholder(R.drawable.ic_launcher_background)
                     .into(binding.postImage)
+            } else {
+                R.drawable.ic_launcher_background
             }
         }
 

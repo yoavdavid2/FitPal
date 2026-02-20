@@ -45,8 +45,8 @@ data class Post(
         const val LIKES_KEY = "likes"
         const val COMMENTS_KEY = "comments"
         const val UPLOAD_DATE_KEY = "uploadDate"
-        const val LAST_UPDATED = "lastUpdated" //timestamp of the last update
-        const val LOCAL_LAST_UPDATED = "locaStudentLastUpdated" //timestamp of the local last update
+        const val LAST_UPDATED = "lastUpdated"
+        const val LOCAL_LAST_UPDATED = "localPostLastUpdated"
 
         fun fromJSON(json: Map<String, Any>): Post {
             val id = json[ID_KEY] as? String ?: ""
