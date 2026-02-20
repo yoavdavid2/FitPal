@@ -33,7 +33,7 @@ class ChatFragment : Fragment() {
     private lateinit var adapter: messagesInChatRecyclerAdapter
     private lateinit var firebaseAuth: FirebaseAuth
 
-            override fun onCreateView(
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
@@ -48,6 +48,7 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        firebaseModel = FirebaseModel()
 
         recycleView = binding?.messagesRecyclerView
         recycleView?.layoutManager = LinearLayoutManager(requireContext())
