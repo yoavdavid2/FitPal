@@ -22,10 +22,15 @@ class AvailableChatViewHolder(private val binding: ItemAvailableChatBinding,  li
             chatName.text = getOtherUser(chat.chatUsers, currentUserName)
             chatAvatar.setImageResource(R.drawable.avatar)
 
-            root.setOnClickListener{
+            root.setOnClickListener { view ->
+                val otherUser = getOtherUser(chat.chatUsers, currentUserName)
+                    ?: chat.chatUsers.firstOrNull()
+                    ?: "Chat"
 
-                val action = MessagesFragmentDirections.actionMessagesFragmentToChatFragment(chat.chatUsers[1], chat.id)
-                it.findNavController().navigate(action)
+                val action = MessagesFragmentDirections
+                    .actionMessagesFragmentToChatFragment(otherUser, chat.id)
+
+                view.findNavController().navigate(action)
             }
         }
     }
