@@ -150,24 +150,19 @@ class Model private constructor() {
     }
 
     fun add(post: Post, image: Bitmap?, storage: Storage, callback: EmptyCallback) {
-        firebaseModel.add(
-            post,
-        ) {
-            image?.let {
-                uploadTo(
-                    storage,
-                    image = image,
-                    name = post.id,
-                    callback = { uri ->
-                        if (!uri.isNullOrBlank()) {
-                            val st = post.copy(image = uri)
-                            firebaseModel.add(st, callback)
-                        } else {
-                            callback()
-                        }
-                    },
-                )
-            } ?: callback()
+
+        if (image != null) {
+            uploadTo(
+                storage,
+                image = image,
+                name = post.id
+            ) { uri ->
+                val postWithImage = post.copy(image = uri ?: "")
+                firebaseModel.add(postWithImage, callback)
+            }
+
+        } else {
+            firebaseModel.add(post, callback)
         }
     }
 

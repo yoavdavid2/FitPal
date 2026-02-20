@@ -47,7 +47,7 @@ class FeedFragment : Fragment() {
         }
 
         binding?.swipeToRefresh?.setOnRefreshListener {
-            viewModel.refreshAllPosts()
+            getAllPosts()
         }
 
         Model.shared.loadingState.observe(viewLifecycleOwner) { state ->
