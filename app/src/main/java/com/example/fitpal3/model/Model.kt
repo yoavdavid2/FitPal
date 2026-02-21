@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.fitpal3.Comment
 import com.example.fitpal3.base.EmptyCallback
+import com.example.fitpal3.base.PostsCallback
 import java.util.concurrent.Executors
 
 class Model private constructor() {
@@ -40,7 +41,6 @@ class Model private constructor() {
     val loadingState: MutableLiveData<LoadingState> = MutableLiveData<LoadingState>()
 
     private val firebaseModel = FirebaseModel()
-//    private val cloudinaryModel = CloudinaryModel() // TODO implement cloudinary
 
     companion object {
         val shared = Model()
@@ -51,7 +51,6 @@ class Model private constructor() {
         val lastUpdated: Long = Post.lastUpdated
         firebaseModel.getAllPosts(lastUpdated) { posts ->
             executor.execute {
-                // Clear table
                 database.postDao().clearPostsTable()
 
                 var currentTime = lastUpdated
@@ -76,7 +75,6 @@ class Model private constructor() {
         Log.d("TAG_refreshComments", "post: " + postId)
         firebaseModel.getPostById(postId) { post ->
             executor.execute {
-                // Clear table
                 database.commentsDao().clearComnmentsTable()
 
                 Log.d("TAG_post", "post: " + post.toString())
@@ -94,17 +92,14 @@ class Model private constructor() {
                             @Suppress("UNCHECKED_CAST")
                             val commentMap = item as Map<String, Any>
 
-                            // Create a Comment from the map
                             val commentObj = Comment(
                                 id = commentMap["id"] as? String ?: "",
                                 author = commentMap["author"] as? String ?: "",
                                 text = commentMap["text"] as? String ?: ""
                             )
 
-                            // Log the created object
                             Log.d("TAG_comment_created", "Comment: $commentObj")
 
-                            // Insert the created object
                             database.commentsDao().insertAll(commentObj)
                             Log.d("TAG_comment_inserted", "Comment inserted successfully")
                         } else {
@@ -115,17 +110,6 @@ class Model private constructor() {
                         e.printStackTrace()
                     }
                 }
-//                        val comment = Comment.fromMap(commentMap as Map<String, Any>)
-//                post?.comments?.forEach { commentMap ->
-//                    try {
-//                        Log.d("TAG_comment", "comment: " + commentMap.toString())
-//                        // Convert HashMap to Comment
-//                        // Insert into the database
-//                        database.commentsDao().insertAll(comment)
-//                    } catch (e: Exception) {
-//                        Log.e("TAG", "Error converting comment", e)
-//                    }
-//                }
             }
         }
     }
@@ -143,10 +127,6 @@ class Model private constructor() {
 
     fun addChat(chat: Chat, callback: EmptyCallback) {
         firebaseModel.addChat(chat) {callback()}
-    }
-
-    fun addChatMessage(message: Message, chatId: String, callback: EmptyCallback) {
-        firebaseModel.addNewMessage(message, chatId) {callback()}
     }
 
     fun add(post: Post, image: Bitmap?, storage: Storage, callback: EmptyCallback) {
@@ -176,10 +156,6 @@ class Model private constructor() {
 
     fun like(postId: String, author: String, callback: EmptyCallback) {
         firebaseModel.like(postId, author, callback)
-    }
-
-    fun delete(post: Post, callback: EmptyCallback) {
-        firebaseModel.delete(post, callback)
     }
 
     private fun uploadTo(storage: Storage, image: Bitmap, name: String, callback: (String?) -> Unit) {
@@ -220,4 +196,19 @@ class Model private constructor() {
             onError = onError
         )
     }
+
+    fun getPostsByAuthor(author: String): LiveData<List<Post>> {
+        return database.postDao().getPostsByAuthor(author)
+    }
+
+    fun clearLocalData(callback: (() -> Unit)? = null) {
+        executor.execute {
+            database.postDao().clearPostsTable()
+            database.commentsDao().clearComnmentsTable()
+            database.chatDao().deleteAllChats()
+            Post.lastUpdated = 0
+            callback?.invoke()
+        }
+    }
+
 }

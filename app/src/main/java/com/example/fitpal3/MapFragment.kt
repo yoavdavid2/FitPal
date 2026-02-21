@@ -44,8 +44,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private var hasReceivedLocation = false
     private var isMapReady = false
 
-    // View related function
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -143,8 +141,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
     }
 
-    // Location related functions
-
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     private fun requestLocationIfNeeded() {
         if (viewModel.hasLocationPermissions(requireContext())) {
@@ -180,8 +176,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
-
-    // Layout related functions
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {

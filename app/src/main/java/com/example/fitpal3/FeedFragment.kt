@@ -87,11 +87,6 @@ class FeedFragment : Fragment() {
         binding = null
     }
 
-    override fun onResume() {
-        super.onResume()
-//        getAllPosts()
-    }
-
     private fun getAllPosts() {
         binding?.progressBar?.visibility = View.VISIBLE
         Model.shared.refreshAllPosts()

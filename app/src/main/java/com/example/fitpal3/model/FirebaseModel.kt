@@ -28,9 +28,7 @@ class FirebaseModel {
     }
 
     fun getAllPosts(sinceLastUpdated: Long, callback: PostsCallback) {
-
         database.collection(Constants.Collections.POSTS)
-//            .whereGreaterThanOrEqualTo(Post.LAST_UPDATED, sinceLastUpdated.toFirebaseTimestamp) //TDOD
             .get()
             .addOnCompleteListener {
                 when (it.isSuccessful) {
@@ -49,7 +47,7 @@ class FirebaseModel {
 
     fun add(post: Post, callback: EmptyCallback) {
         database.collection(Constants.Collections.POSTS)
-             .add(post.json)
+            .add(post.json)
             .addOnSuccessListener { documentReference ->
                 Log.d("TAG", "DocumentSnapshot added with ID: ${documentReference.id}")
                 callback()
@@ -62,7 +60,6 @@ class FirebaseModel {
     fun like(postId: String, author: String, callback: EmptyCallback) {
         val postsCollection = database.collection(Constants.Collections.POSTS)
 
-        // Query to find the document where "id" field matches postId
         postsCollection.whereEqualTo("id", postId).get()
             .addOnSuccessListener { querySnapshot ->
                 if (querySnapshot.isEmpty) {
@@ -78,9 +75,9 @@ class FirebaseModel {
                     val likes = snapshot.get("likes") as? List<String> ?: emptyList()
 
                     val updatedLikes = if (likes.contains(author)) {
-                        likes - author // Remove author if they already liked
+                        likes - author
                     } else {
-                        likes + author // Add author if they haven't liked
+                        likes + author
                     }
 
                     transaction.update(postRef, "likes", updatedLikes)
@@ -99,7 +96,6 @@ class FirebaseModel {
     fun addComment(postId: String, newComment: Comment, callback: (Boolean) -> Unit) {
         val postsCollection = database.collection(Constants.Collections.POSTS)
 
-        // Query to find the document where "id" field matches postId
         postsCollection.whereEqualTo("id", postId).get()
             .addOnSuccessListener { querySnapshot ->
                 if (querySnapshot.isEmpty) {
@@ -107,7 +103,7 @@ class FirebaseModel {
                     return@addOnSuccessListener
                 }
 
-                val postRef = querySnapshot.documents.first().reference // Get the DocumentReference
+                val postRef = querySnapshot.documents.first().reference
 
                 database.runTransaction { transaction ->
                     val snapshot = transaction.get(postRef)
@@ -151,28 +147,6 @@ class FirebaseModel {
             }
     }
 
-    fun delete(post: Post, callback: EmptyCallback) {
-
-    }
-
-//    fun uploadImage(image: Bitmap, name: String, callback: (String?) -> Unit) {
-//        val storageRef = storage.reference
-//        val imageRef = storageRef.child("images/$name.jpg")
-//        val baos = ByteArrayOutputStream()
-//        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-//        val data = baos.toByteArray()
-//
-//        var uploadTask = imageRef.putBytes(data)
-//        uploadTask.addOnFailureListener {
-//            callback(null)
-//        }.addOnSuccessListener { taskSnapshot ->
-//            imageRef.downloadUrl.addOnSuccessListener { uri ->
-//                callback(uri.toString())
-//            }
-//        }
-//    }
-
-
     fun getUserInboxMessages(activeUserEmail: String, callback: (MutableList<Chat>) -> Unit) {
         database.collection("chats").whereArrayContains("chatUsers", activeUserEmail).get()
             .addOnSuccessListener { querySnapshot ->
@@ -207,7 +181,7 @@ class FirebaseModel {
                 callback(currentUserChats)
             }
             .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting user chats", exception) // Include exception in log
+                Log.w(TAG, "Error getting user chats", exception)
             }
     }
 
