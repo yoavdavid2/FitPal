@@ -140,6 +140,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun logoutUser() {
+        Model.shared.clearLocalData()
+
         auth.signOut()
 
         findNavController().navigate(

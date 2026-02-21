@@ -51,7 +51,6 @@ class MessagesFragment : Fragment() {
         adapter = ChatsRecyclerAdapter()
         recycleView?.adapter = adapter
 
-
         observeViewModel()
         addButtonsListeners()
     }

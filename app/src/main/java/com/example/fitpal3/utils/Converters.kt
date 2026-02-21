@@ -24,12 +24,12 @@ class Converters {
         if (value.isNullOrEmpty()) return emptyList()
 
         val listType = object : TypeToken<List<String>>() {}.type
-        return gson.fromJson<List<String>>(value, listType) // Explicit type
+        return gson.fromJson<List<String>>(value, listType)
     }
 
     @TypeConverter
     fun toStringList(list: List<String>?): String {
-        return gson.toJson(list ?: listOf<String>()) // Handles null properly
+        return gson.toJson(list ?: listOf<String>())
     }
 
     @TypeConverter
@@ -41,7 +41,7 @@ class Converters {
 
     @TypeConverter
     fun toCommentList(list: List<Comment>?): String {
-        return gson.toJson(list ?: listOf<Comment>()) // Handles null properly
+        return gson.toJson(list ?: listOf<Comment>())
     }
     @TypeConverter
     fun fromMessageList(messages: List<Message>?): String? {

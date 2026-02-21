@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 interface OnItemClickListener {
     fun onItemClick(position: Int)
     fun onItemClick(student: Post?)
-    fun onCommentClick(postId: String) // Add this for the comment button
+    fun onCommentClick(postId: String)
 }
 
 class MainActivity : AppCompatActivity() {
