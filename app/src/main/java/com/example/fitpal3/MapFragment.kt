@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import androidx.core.net.toUri
 
 class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private var binding: FragmentMapBinding? = null
@@ -105,6 +106,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
     }
 
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     override fun onResume() {
         super.onResume()
         if (userVisibleHint && isMapReady) {
@@ -131,6 +133,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         binding = null
     }
 
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
 
@@ -194,6 +197,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             }
         }
 
+        viewModel.markers.value?.let { marker ->
+            updateMarkers(marker)
+        }
         requestLocationIfNeeded()
         Log.d(TAG, "Map ready")
     }
@@ -224,6 +230,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
     }
 
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     private fun refreshMap() {
         if (viewModel.hasLocationPermissions(requireContext())) {
             viewModel.getUserLocation(requireContext(), showPermissionError = false)
@@ -343,7 +350,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
     private fun openDirections(place: Place) {
         val uri =
-            Uri.parse("geo:0,0?q=${place.location.latitude},${place.location.longitude}(${place.displayName.text})")
+            "geo:0,0?q=${place.location.latitude},${place.location.longitude}(${place.displayName.text})".toUri()
         val intent = Intent(Intent.ACTION_VIEW, uri)
         intent.setPackage("com.google.android.apps.maps")
 

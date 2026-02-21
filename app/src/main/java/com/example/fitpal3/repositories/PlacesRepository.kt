@@ -71,6 +71,8 @@ class PlacesRepository {
                     }
                 } else {
                     val errorMsg = "API Error: ${response.code()} - ${response.message()}"
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("PlacesRepository", "API Error ${response.code()} ${response.message()} body=$errorBody")
                     callback.onError(Exception(errorMsg))
                 }
 

@@ -10,9 +10,11 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.fitpal3.R
 import com.example.fitpal3.model.places.MarkerOptionsWithPlace
 import com.example.fitpal3.model.places.Place
 import com.example.fitpal3.repositories.PlacesRepository
+import com.example.fitpal3.utils.MarkerIconFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -20,6 +22,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.CancellationTokenSource
+import androidx.core.graphics.toColorInt
 
 class MapViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -132,10 +135,24 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
 
         val gymMarkers = gyms.map { gym ->
             val color = when {
-                gym.types?.contains("fitness_center") == true -> BitmapDescriptorFactory.HUE_GREEN
-                gym.types?.contains("gym") == true -> BitmapDescriptorFactory.HUE_CYAN
-                else -> BitmapDescriptorFactory.HUE_ORANGE
+                gym.types?.contains("fitness_center") == true -> "#34A853".toColorInt()
+                gym.types?.contains("gym") == true -> "#00BCD4".toColorInt()
+                else -> "#95A5A6".toColorInt()
             }
+
+            val overlayRes = when {
+                gym.types?.contains("fitness_center") == true -> R.drawable.fitness
+                gym.types?.contains("gym") == true -> R.drawable.gym
+                else -> BitmapDescriptorFactory.defaultMarker(color.toFloat())
+            }
+
+            val icon = MarkerIconFactory.createPinnedIcon(
+                context = getApplication(),
+                baseRes = R.drawable.marker_pin_base,
+                overlayRes = overlayRes as Int,
+                baseTint = color,
+                overlayTint = 0xFFFFFFFF.toInt()
+            )
 
             MarkerOptionsWithPlace(
                 MarkerOptions()
@@ -147,7 +164,7 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
                     )
                     .title(gym.displayName.text)
                     .snippet(gym.formattedAddress ?: "")
-                    .icon(BitmapDescriptorFactory.defaultMarker(color)),
+                    .icon(icon),
                 gym
             )
 
