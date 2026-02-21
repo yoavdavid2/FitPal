@@ -37,7 +37,7 @@ class SignupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mAuth = FirebaseAuth.getInstance()
-        db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+        db = FirebaseFirestore.getInstance()
 
         val sports = listOf("Football", "Basketball", "Tennis", "Swimming", "Running")
 

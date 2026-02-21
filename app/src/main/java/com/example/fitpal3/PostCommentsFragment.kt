@@ -101,10 +101,6 @@ class PostCommentsFragment : Fragment() {
         return binding?.root
     }
 
-    private fun onCancelClick(view: View) {
-        Navigation.findNavController(view).popBackStack()
-    }
-
     private fun getCommentsOnPosts(postId: String) {
         binding?.progressBar?.visibility = View.VISIBLE
         viewModel.refreshComments(postId) {

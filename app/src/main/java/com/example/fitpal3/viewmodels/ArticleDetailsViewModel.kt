@@ -37,8 +37,4 @@ class ArticleDetailsViewModel : ViewModel() {
             }
         }
     }
-
-    fun clearError() {
-        _error.value = null
-    }
 }
