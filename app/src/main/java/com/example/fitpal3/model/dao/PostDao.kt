@@ -14,7 +14,7 @@ interface PostDao  {
     @Query("DELETE FROM Post")
     fun clearPostsTable()
 
-    @Query("SELECT * FROM Post")
+    @Query("SELECT * FROM Post ORDER BY lastUpdated DESC")
     fun getAllPosts(): LiveData<List<Post>>
 
     @Query("SELECT * FROM Post WHERE id =:id")
