@@ -27,6 +27,25 @@ class FirebaseModel {
         database.firestoreSettings = settings
     }
 
+    fun getAllPostsByEmail(email: String, callback: PostsCallback) {
+        database.collection(Constants.Collections.POSTS)
+            //.whereGreaterThanOrEqualTo(Post.LAST_UPDATED, sinceLastUpdated.toFirebaseTimestamp) // TODO
+            .whereEqualTo("email", email)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val posts: MutableList<Post> = mutableListOf()
+                    for (doc in task.result) {
+                        posts.add(Post.fromJSON(doc.data))
+                    }
+                    callback(posts)
+                } else {
+                    callback(listOf())
+                }
+            }
+    }
+
+
     fun getAllPosts(sinceLastUpdated: Long, callback: PostsCallback) {
 
         database.collection(Constants.Collections.POSTS)
@@ -49,7 +68,7 @@ class FirebaseModel {
 
     fun add(post: Post, callback: EmptyCallback) {
         database.collection(Constants.Collections.POSTS)
-             .add(post.json)
+            .add(post.json)
             .addOnSuccessListener { documentReference ->
                 Log.d("TAG", "DocumentSnapshot added with ID: ${documentReference.id}")
                 callback()

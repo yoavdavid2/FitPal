@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +35,8 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-        getAllPosts()
+        //getAllPosts()
+        getUserPosts() // New
         return binding?.root
     }
 
@@ -90,7 +93,7 @@ class ProfileFragment : Fragment() {
         for (sport in sports) {
             val label = LayoutInflater.from(requireContext()).inflate(
                 R.layout.sport_label, parentLayout, false
-            ) as androidx.appcompat.widget.AppCompatTextView
+            ) as AppCompatTextView
 
             label.text = sport
             label.id = View.generateViewId()
@@ -151,7 +154,7 @@ class ProfileFragment : Fragment() {
 
         findNavController().navigate(
             ProfileFragmentDirections.actionProfileFragmentToLoginFragment(),
-            androidx.navigation.NavOptions.Builder()
+            NavOptions.Builder()
                 .setPopUpTo(R.id.profileFragment, true)
                 .build()
         )
@@ -165,5 +168,37 @@ class ProfileFragment : Fragment() {
     private fun getAllPosts() {
         binding?.progressBar?.visibility = View.VISIBLE
         Model.shared.refreshAllPosts()
+    }
+
+    private fun getAuthor( callback: (String) -> Unit) {
+        var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+        var auth: FirebaseAuth = FirebaseAuth.getInstance()
+        val userId = auth.currentUser?.uid
+        var author: String = "**************temp-author**************"
+        if (userId != null) {
+            firestore.collection("users").document(userId)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        author = document.getString("email") ?: ""
+                        callback(author)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(requireContext(), "Error fetching data", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+    private fun getUserPosts() {
+        binding?.progressBar?.visibility = View.VISIBLE
+        getAuthor() { author ->
+            Model.shared.getPostByEmail(
+                author,
+                callback = {
+                    binding?.progressBar?.visibility = View.GONE
+                }
+            )
+        }
     }
 }

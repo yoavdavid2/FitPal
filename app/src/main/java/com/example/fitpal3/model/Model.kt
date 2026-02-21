@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.fitpal3.Comment
 import com.example.fitpal3.base.EmptyCallback
+import com.example.fitpal3.base.PostsCallback
 import java.util.concurrent.Executors
 
 class Model private constructor() {
@@ -46,6 +47,9 @@ class Model private constructor() {
         val shared = Model()
     }
 
+    fun getPostByEmail(email: String, callback: (Post?) -> Unit) {
+        firebaseModel.getAllPostsByEmail(email, callback as PostsCallback)
+    }
     fun refreshAllPosts() {
         loadingState.postValue(LoadingState.LOADING)
         val lastUpdated: Long = Post.lastUpdated
