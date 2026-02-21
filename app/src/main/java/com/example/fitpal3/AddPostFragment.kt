@@ -32,6 +32,11 @@ class AddPostFragment : Fragment() {
         binding?.apply {
             saveButton.setOnClickListener(::onSaveClicked)
             cancelButton.setOnClickListener(::onCancelClicked)
+
+            dateEditText.setOnClickListener {
+                showDatePicker()
+            }
+
             cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {bitmap ->
                 imageView.setImageBitmap(bitmap)
                 didSetProfileImage = true
@@ -40,6 +45,7 @@ class AddPostFragment : Fragment() {
             takePhotoButton.setOnClickListener {
                 cameraLauncher?.launch(null)
             }
+
         }
         return binding?.root
     }
@@ -97,5 +103,22 @@ class AddPostFragment : Fragment() {
 
     private fun onCancelClicked(view: View) {
         view.findNavController().popBackStack()
+    }
+
+    private fun showDatePicker() {
+        val calender = java.util.Calendar.getInstance()
+
+        val dialog = android.app.DatePickerDialog(
+            requireContext(),
+            { _, year, month, day ->
+                val formatted = "%02d/%02d/%04d".format(day, month + 1, year)
+                binding?.dateEditText?.setText(formatted)
+            },
+            calender.get(java.util.Calendar.YEAR),
+            calender.get(java.util.Calendar.MONTH),
+            calender.get(java.util.Calendar.DAY_OF_MONTH)
+        )
+
+        dialog.show()
     }
 }
