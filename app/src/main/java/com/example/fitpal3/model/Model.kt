@@ -47,9 +47,23 @@ class Model private constructor() {
         val shared = Model()
     }
 
-    fun getPostByEmail(email: String, callback: (Post?) -> Unit) {
-        firebaseModel.getAllPostsByEmail(email, callback as PostsCallback)
+    fun refreshPostsByEmail(email: String, callback: EmptyCallback) {
+        loadingState.postValue(LoadingState.LOADING)
+
+        firebaseModel.getAllPostsByEmail(email) { posts ->
+            executor.execute {
+                database.postDao().clearPostsTable()
+
+                posts.forEach { post ->
+                    database.postDao().insertAll(post)
+                }
+
+                loadingState.postValue(LoadingState.LOADED)
+                callback()
+            }
+        }
     }
+
     fun refreshAllPosts() {
         loadingState.postValue(LoadingState.LOADING)
         val lastUpdated: Long = Post.lastUpdated
@@ -223,5 +237,9 @@ class Model private constructor() {
             onSuccess = onSuccess,
             onError = onError
         )
+    }
+
+    fun getPostsByAuthor(author: String): LiveData<List<Post>> {
+        return database.postDao().getPostsByAuthor(author)
     }
 }

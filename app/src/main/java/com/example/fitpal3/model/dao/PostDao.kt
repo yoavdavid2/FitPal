@@ -25,4 +25,7 @@ interface PostDao  {
 
     @Delete
     fun delete(post: Post)
+
+    @Query("SELECT * FROM Post WHERE author = :author ORDER BY lastUpdated DESC")
+    fun getPostsByAuthor(author: String): LiveData<List<Post>>
 }

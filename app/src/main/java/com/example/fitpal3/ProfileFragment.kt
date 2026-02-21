@@ -35,8 +35,6 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-        //getAllPosts()
-        getUserPosts() // New
         return binding?.root
     }
 
@@ -51,9 +49,10 @@ class ProfileFragment : Fragment() {
             logoutUser()
         }
 
-
         fetchUserData()
         setupRecyclerView()
+
+        getUserPosts()
     }
 
     private fun fetchUserData() {
@@ -106,17 +105,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-
-
         val recyclerView: RecyclerView? = binding?.postsRecyclerView
         recyclerView?.setHasFixedSize(true)
-
-        viewModel.posts.observe(viewLifecycleOwner) {
-            adapter?.posts = it
-            adapter?.notifyDataSetChanged()
-
-            binding?.progressBar?.visibility = View.GONE
-        }
 
         binding?.swipeToRefresh?.setOnRefreshListener {
             viewModel.refreshAllPosts()
@@ -165,11 +155,6 @@ class ProfileFragment : Fragment() {
         binding = null
     }
 
-    private fun getAllPosts() {
-        binding?.progressBar?.visibility = View.VISIBLE
-        Model.shared.refreshAllPosts()
-    }
-
     private fun getAuthor( callback: (String) -> Unit) {
         var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
         var auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -192,13 +177,17 @@ class ProfileFragment : Fragment() {
 
     private fun getUserPosts() {
         binding?.progressBar?.visibility = View.VISIBLE
-        getAuthor() { author ->
-            Model.shared.getPostByEmail(
-                author,
-                callback = {
+
+        getAuthor { authorEmail ->
+
+            Model.shared.getPostsByAuthor(authorEmail)
+                .observe(viewLifecycleOwner) { posts ->
+
+                    adapter?.posts = posts
+                    adapter?.notifyDataSetChanged()
+
                     binding?.progressBar?.visibility = View.GONE
                 }
-            )
         }
     }
 }
