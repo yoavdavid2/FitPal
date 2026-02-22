@@ -16,7 +16,7 @@ class MessagesInChatViewHolder(private val binding: ItemChatMessageBinding) : Re
                 binding.senderEmail.gravity = Gravity.START
             } else {
                 binding.messageText.text = message.messageText
-                binding.senderEmail.text = currentUserEmail
+                binding.senderEmail.text =  message.senderId
                 binding.messageText.gravity = Gravity.END
                 binding.senderEmail.gravity = Gravity.END
             }
