@@ -92,7 +92,7 @@ class ChatFragment : Fragment() {
 
                     val newMessage = Message( id = chatId + "_" + UUID.randomUUID().toString(),
                         messageText = userInputMessage,
-                        senderId = "me",
+                        senderId = firebaseAuth.currentUser?.email ?: "me",
                         timestamp =com.google.firebase.Timestamp.now()
                     )
 
