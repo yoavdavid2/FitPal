@@ -68,13 +68,6 @@ class ChatFragment : Fragment() {
         }
     }
 
-
-//    private fun fetchChatMessages(chatId: String) {
-//        firebaseModel.getChatMessages(chatId) { messages: MutableList<Message> ->
-//            viewModel.updateMessages(messages)
-//        }
-//    }
-
     private fun fetchChatMessages(chatId: String) {
         firebaseModel.listenToChatMessages(chatId) { messages ->
             viewModel.updateMessages(messages)
@@ -97,11 +90,14 @@ class ChatFragment : Fragment() {
                     )
 
                     firebaseModel.addNewMessage(newMessage, it) { success ->
-                        if (success) {
-//                            viewModel.addNewMessage(newMessage)
-                        } else {
-                            Toast.makeText(requireContext(), "Failed to add chat", Toast.LENGTH_SHORT).show()
-                        } }
+                        if (!success) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Failed to add chat",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
             }
         }
