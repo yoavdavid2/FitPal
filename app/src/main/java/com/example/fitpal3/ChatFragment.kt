@@ -69,8 +69,14 @@ class ChatFragment : Fragment() {
     }
 
 
+//    private fun fetchChatMessages(chatId: String) {
+//        firebaseModel.getChatMessages(chatId) { messages: MutableList<Message> ->
+//            viewModel.updateMessages(messages)
+//        }
+//    }
+
     private fun fetchChatMessages(chatId: String) {
-        firebaseModel.getChatMessages(chatId) { messages: MutableList<Message> ->
+        firebaseModel.listenToChatMessages(chatId) { messages ->
             viewModel.updateMessages(messages)
         }
     }
@@ -92,7 +98,7 @@ class ChatFragment : Fragment() {
 
                     firebaseModel.addNewMessage(newMessage, it) { success ->
                         if (success) {
-                            viewModel.addNewMessage(newMessage)
+//                            viewModel.addNewMessage(newMessage)
                         } else {
                             Toast.makeText(requireContext(), "Failed to add chat", Toast.LENGTH_SHORT).show()
                         } }
@@ -113,5 +119,10 @@ class ChatFragment : Fragment() {
     private fun hideKeyboard(editText: EditText?) {
         val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(editText?.windowToken, 0)
+    }
+
+    override fun onStop() {
+        firebaseModel.stopListeningToChatMessages()
+        super.onStop()
     }
 }

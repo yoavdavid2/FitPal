@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
+import com.google.firebase.firestore.ListenerRegistration
 
 
 class FirebaseModel {
@@ -193,24 +194,53 @@ class FirebaseModel {
     }
 
 
-    fun getChatMessages(chatId: String, callback: (MutableList<Message>) -> Unit) {
+//    fun getChatMessages(chatId: String, callback: (MutableList<Message>) -> Unit) {
+//        val chatDocRef = database.collection("chats").document(chatId)
+//
+//        chatDocRef.get()
+//            .addOnSuccessListener { documentSnapshot ->
+//                if (documentSnapshot.exists()) {
+//                    val messages = documentSnapshot["messages"] as? List<HashMap<String, Any>>
+//                    val parsedMessaged = convertHashMapListToMessages(messages)
+//
+//                    callback(parsedMessaged.toMutableList())
+//                } else {
+//                    callback(mutableListOf())
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.d(TAG, "error getting chat message")
+//                callback(mutableListOf())
+//            }
+//    }
+
+    private var chatListener: ListenerRegistration? = null
+
+    fun listenToChatMessages(chatId: String, callback: (MutableList<Message>) -> Unit) {
         val chatDocRef = database.collection("chats").document(chatId)
 
-        chatDocRef.get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    val messages = documentSnapshot["messages"] as? List<HashMap<String, Any>>
-                    val parsedMessaged = convertHashMapListToMessages(messages)
+        chatListener?.remove()
 
-                    callback(parsedMessaged.toMutableList())
-                } else {
-                    callback(mutableListOf())
-                }
+        chatListener = chatDocRef.addSnapshotListener { documentSnapshot, error ->
+            if (error != null) {
+                Log.d(TAG, "listenToChatMessages error", error)
+                callback(mutableListOf())
+                return@addSnapshotListener
             }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "error getting chat message")
+
+            if (documentSnapshot != null && documentSnapshot.exists()) {
+                val messages = documentSnapshot["messages"] as? List<HashMap<String, Any>>
+                val parsedMessages = convertHashMapListToMessages(messages)
+                callback(parsedMessages.toMutableList())
+            } else {
                 callback(mutableListOf())
             }
+        }
+    }
+
+    fun stopListeningToChatMessages() {
+        chatListener?.remove()
+        chatListener = null
     }
 
 
