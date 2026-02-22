@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
@@ -14,6 +15,8 @@ import com.example.fitpal3.adapter.CommentsRecyclerAdapter
 import com.example.fitpal3.databinding.FragmentPostCommentsBinding
 import com.example.fitpal3.model.Model
 import com.example.fitpal3.viewmodels.CommentListViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.UUID
 
 
@@ -72,20 +75,21 @@ class PostCommentsFragment : Fragment() {
 
         binding?.apply {
             saveButton.setOnClickListener {
-                val newComment = binding?.newComment?.text.toString()
-                val CONST_AUTHOR = "author" //TODO get user Email
-                val uuid: String = UUID.randomUUID().toString()
-                val c = Comment(uuid, CONST_AUTHOR, newComment)
-                Model.shared.addComment(postId!!, c) { success ->
-                    if (success) {
-                        viewModel.refreshComments(postId!!) {
+                getAuthor { author ->
+                    val newComment = binding?.newComment?.text.toString()
+                    val uuid: String = UUID.randomUUID().toString()
+                    val c = Comment(uuid, author, newComment)
+                    Model.shared.addComment(postId!!, c) { success ->
+                        if (success) {
+                            viewModel.refreshComments(postId!!) {
 
+                            }
+                        } else {
+                            progressBar.visibility = View.GONE
                         }
-                    } else {
-                        progressBar.visibility = View.GONE
                     }
+                    binding?.newComment?.setText("")
                 }
-                binding?.newComment?.setText("")
             }
 
             backButton.setOnClickListener {
@@ -99,6 +103,26 @@ class PostCommentsFragment : Fragment() {
         }
 
         return binding?.root
+    }
+
+    private fun getAuthor( callback: (String) -> Unit) {
+        var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+        var auth: FirebaseAuth = FirebaseAuth.getInstance()
+        val userId = auth.currentUser?.uid
+        var author: String = "**************temp-author**************"
+        if (userId != null) {
+            firestore.collection("users").document(userId)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        author = document.getString("email") ?: ""
+                        callback(author)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(requireContext(), "Error fetching data", Toast.LENGTH_SHORT).show()
+                }
+        }
     }
 
     private fun getCommentsOnPosts(postId: String) {
