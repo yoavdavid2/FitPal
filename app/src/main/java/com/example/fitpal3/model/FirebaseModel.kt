@@ -193,27 +193,6 @@ class FirebaseModel {
 
     }
 
-
-//    fun getChatMessages(chatId: String, callback: (MutableList<Message>) -> Unit) {
-//        val chatDocRef = database.collection("chats").document(chatId)
-//
-//        chatDocRef.get()
-//            .addOnSuccessListener { documentSnapshot ->
-//                if (documentSnapshot.exists()) {
-//                    val messages = documentSnapshot["messages"] as? List<HashMap<String, Any>>
-//                    val parsedMessaged = convertHashMapListToMessages(messages)
-//
-//                    callback(parsedMessaged.toMutableList())
-//                } else {
-//                    callback(mutableListOf())
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d(TAG, "error getting chat message")
-//                callback(mutableListOf())
-//            }
-//    }
-
     private var chatListener: ListenerRegistration? = null
 
     fun listenToChatMessages(chatId: String, callback: (MutableList<Message>) -> Unit) {
